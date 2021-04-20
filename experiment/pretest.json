@@ -1,18 +1,30 @@
 [
-{"question":"This is a Sample Question 1?",
+{"question":"1. The Sutherland Hodgeman works for the following cases :",
 "answers":{
-            "a":"answer1",
-            "b":"answer2",
-            "c":"answer3",
-            "d":"answer4"
+            "a":"Convex Polygon with convex clip window",
+            "b":"Concave polygon with convex clip window",
+            "c":"Convex polygon with concave clip window",
+            "d":"a and b",
+            "e":"a and c",
+            "f":"All of the above"
           },
 "correctAnswer":"a"},
-{"question":"This is a Sample Question 2?",
+
+{"question":"2. Will the output matter on the order in which we process the polygon?",
 "answers":{
-            "a":"answer1",
-            "b":"answer2",
-            "c":"answer3",
-            "d":"answer4"
+            "a":"Yes",
+            "b":"No"
           },
-"correctAnswer":"c"} 
+"correctAnswer":"c"},
+
+{"question":"3. Let m be the slope of the line joining clip polygon point Pi(x1, y1) and Pi+1(x2, y2). The intersection point of this line with the Left side of clip window is : ",
+"answers":{
+            "a":"x = xmin; y = (int)(y2 + ((xmin - x2)*m));",
+            "b":"x = xmax; y = (int)(y2 + ((xmax - x2)*m));",
+            "c":"x = x2; y = ymin;",
+            "d":"x = (int) (x2 + ((ymax - y2)/m)); y = ymax;",
+          },
+"correctAnswer":"a"} 
+
+
 ]
