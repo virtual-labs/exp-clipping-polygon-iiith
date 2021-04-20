@@ -22,7 +22,7 @@
             "a":"x = xmin; y = (int)(y2 + ((xmin - x2)*m));",
             "b":"x = xmax; y = (int)(y2 + ((xmax - x2)*m));",
             "c":"x = x2; y = ymin;",
-            "d":"x = (int) (x2 + ((ymax - y2)/m)); y = ymax;",
+            "d":"x = (int)(x2 + ((ymax - y2)/m)); y = ymax;"
           },
 "correctAnswer":"a"} 
 
