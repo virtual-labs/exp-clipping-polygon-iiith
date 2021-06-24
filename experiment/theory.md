@@ -2,7 +2,7 @@
 
 Pseudo Code of the algorithm
 
-Input : Vertices of the polygon, (xi, yi) ÅÕi = {1, 2, ..., n} for n vertices in the polygon and the coordinates of the opposite corners of the clipped window.
+Input : Vertices of the polygon, (xi, yi) ‚àÄi= {1, 2, ..., n} for n vertices in the polygon and the coordinates of the opposite corners of the clipped window.
 Steps of the Algorithm
 
       for each of the four boundaries of the clipped window
