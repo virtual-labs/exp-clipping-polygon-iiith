@@ -7,4 +7,6 @@ Some common algorithms to perform polygon clipping are as follows:
  1. Sutherland-Hodgeman algorithm
  2. Wiler-Atherton algorithm
 
-Here we have discussed only the Sutherland-Hodgeman Polygon Clipping algorithm. 
+Here we have discussed only the Sutherland-Hodgeman Polygon Clipping algorithm.   
+
+Objective of this experiment is to understand the steps of a Polygon Clipping Algorithm, i.e., how a polygon is clipped so as to render only the part which a user can view. As an example, we have demonstrated the steps of Sutherland Hodgeman Algorithm.
