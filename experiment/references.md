@@ -1,4 +1,4 @@
-1. [Sutherland¡VHodgman algorithm](https://en.wikipedia.org/wiki/Sutherland%E2%80%93Hodgman_algorithm)
+1. [Sutherland-Hodgman algorithm](https://en.wikipedia.org/wiki/Sutherland%E2%80%93Hodgman_algorithm)
 
 2. James D. Foley. Computer graphics: Principles and Practice. Addison-Wesley Professional.
 
