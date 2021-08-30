@@ -1,0 +1,1 @@
+- To understand the steps of a Polygon Clipping Algorithm, i.e., how a polygon is clipped so as to render only the part which a user can view. As an example, we have demonstrated the steps of Sutherland Hodgeman Algorithm.
