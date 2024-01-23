@@ -1,1 +1,1 @@
-## Clipping : Polygon
+## Clipping: Polygon

@@ -1,10 +1,3 @@
- When a 2D image is displayed onto a display screen, often the display area occupies a fraction of the amount of space that covers the entire image area. Thus the unnecessary parts of the image that are located outside the display area can be removed to reduce the exorbitant amount of computations involved to render them. This technique to remove such inessential parts of a scene lying outside the display area is called **clipping**. The display area is also called the **clipped window**.
+In computer graphics, the process of rendering a 2D image onto a display screen often involves displaying a portion of the overall image within a designated area known as the display or clipped window. To enhance efficiency and reduce computational overhead, it is essential to eliminate unnecessary elements lying outside this display area. This selective removal of portions outside the clipped window is referred to as **clipping**.
 
-The technique used to cut/clip the parts of the polygon belonging in the region, outside of the clipped window, is called **polygon clipping**.
-
-Some common algorithms to perform polygon clipping are as follows:
-
- 1. Sutherland-Hodgeman algorithm
- 2. Wiler-Atherton algorithm
-
-Here we have discussed only the Sutherland-Hodgeman Polygon Clipping algorithm.   
+The specific focus of this experiment is on **polygon clipping**, a technique used to remove segments of a polygon that extend beyond the boundaries of the clipped window. Two commonly employed algorithms for polygon clipping are the Sutherland-Hodgeman algorithm and the Wiler-Atherton algorithm. However, this experiment delves into the details of the Sutherland-Hodgeman Polygon Clipping algorithm, providing a comprehensive understanding of its implementation and significance in the context of computer graphics.
