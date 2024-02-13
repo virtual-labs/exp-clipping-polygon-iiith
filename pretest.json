@@ -1,0 +1,75 @@
+{
+  "version": 1.0,
+  "questions": [
+      {
+          "question": "1. What is the primary purpose of polygon clipping in computer graphics?",
+          "answers": {
+              "a": "To increase the computational complexity of rendering.",
+              "b": "To render unnecessary parts of a scene outside the display area.",
+              "c": "To add more details to the displayed image.",
+              "d": "To enlarge the display area for better visibility."
+          },
+          "correctAnswer": "b",
+          "explanation": {
+              "b": "Polygon clipping is used to remove unnecessary parts of a scene lying outside the display area, reducing computational load and improving rendering efficiency."
+          },
+          "difficulty": "beginner"
+      },
+      {
+          "question": "2. Which term is commonly used for the area where the image is displayed in computer graphics?",
+          "answers": {
+              "a": "Clipped Window",
+              "b": "Rendering Space",
+              "c": "Viewport",
+              "d": "Display Frame"
+          },
+          "correctAnswer": "c",
+          "explanation": {
+              "c": "The area where the image is displayed in computer graphics is commonly referred to as the viewport."
+          },
+          "difficulty": "beginner"
+      },
+      {
+          "question": "3. In the context of polygon clipping, what is the primary focus of the Sutherland-Hodgeman Algorithm?",
+          "answers": {
+              "a": "Sorting polygons in ascending order.",
+              "b": "Clipping lines within the polygon.",
+              "c": "Removing segments of a polygon outside the clipped window.",
+              "d": "Calculating the polygon area."
+          },
+          "correctAnswer": "c",
+          "explanation": {
+              "c": "The Sutherland-Hodgeman Algorithm is specifically designed for removing segments of a polygon that extend beyond the boundaries of the clipped window."
+          },
+          "difficulty": "intermediate"
+      },
+      {
+          "question": "4. What is the significance of polygon clipping in the context of visual rendering?",
+          "answers": {
+              "a": "It increases computational load.",
+              "b": "It enhances image resolution.",
+              "c": "It reduces unnecessary computations and optimizes rendering.",
+              "d": "It expands the display area."
+          },
+          "correctAnswer": "c",
+          "explanation": {
+              "c": "Polygon clipping reduces unnecessary computations by removing parts outside the clipped window, thereby optimizing the rendering process."
+          },
+          "difficulty": "intermediate"
+      },
+      {
+          "question": "5. What is a potential drawback of neglecting polygon clipping in visual rendering?",
+          "answers": {
+              "a": "Enhanced image quality.",
+              "b": "Improved computational efficiency.",
+              "c": "Visible artifacts and increased computational load.",
+              "d": "Wider display area."
+          },
+          "correctAnswer": "c",
+          "explanation": {
+              "c": "Neglecting polygon clipping may lead to visible artifacts and an increased computational load, compromising the overall quality of visual rendering."
+          },
+          "difficulty": "advanced"
+      }
+  ]
+}
