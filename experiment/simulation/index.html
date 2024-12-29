@@ -13,73 +13,171 @@
 
 <body class="page has-text-centered">
 
-   <div class="columns is-centered column">
-    <div class="v-collapsible-instruction-container v-instruction-container">
-      <div id="instruction-title" class="v-collapsible is-size-5">Instructions</div>
-      <div id="procedure-message" class="v-content" style="text-align: left; padding-left: 10%; padding-right: 10%;">
-        <ul style="list-style: disc;">
-                        <li>Use the Reset button to reset the simulation</li>
-                        <li>Click on Next button to go to next iteration</li>
-                        <li>Click on Previous button to go to previous iteration</li>
-                        <li>Change the positions of rectangle coordinates and line coordinates</li>
-                    </ul>
-                </div>
+    <div class="columns is-centered column">
+        <div class="v-collapsible-instruction-container">
+            <div class="v-collapsible" id="toggle-instructions"
+                style="cursor: pointer; background: #f1f1f1; padding: 10px; border-radius: 5px;">
+                <strong>Instructions</strong>
             </div>
         </div>
+
+        <!-- Fullscreen Instructions Modal -->
+        <div id="procedure-message" class="v-content">
+            <ol>
+                <li class="instr-font">
+                    <strong style="font-size: 19px;">📏 Clipping Rectangle Coordinates</strong>:
+                    <ul style="list-style-type: disc; padding-left: 20px;">
+                        <li><strong>Top Left</strong>: The coordinates of the upper-left corner of the clipping area.
+                        </li>
+                        <li><strong>Bottom Right</strong>: The coordinates of the lower-right corner of the clipping
+                            area.</li>
+
+                    </ul>
+                </li>
+                <li class="instr-font">
+                    <strong style="font-size: 19px;">🔷 Polygon Coordinates</strong>:
+                    <ul style="list-style-type: disc; padding-left: 20px;">
+                        <li>Defines the X and Y positions of each vertex.</li>
+                        <li>A 5-point polygon has 5 coordinate pairs to form a closed shape.</li>
+                    </ul>
+                </li>
+
+
+
+                <li class="instr-font">
+                    <strong style="font-size: 19px;">🚀 Getting Started</strong>:
+                    <p>To begin, set the clipping window and polygon coordinates, then press <strong
+                            style="color: #3298dc;">Submit</strong>.
+                        Use the controls below to navigate through the simulation:</p>
+                </li>
+                <ul style="list-style-type: disc; padding-left: 20px;">
+                    <li class="instr-font">
+                        <strong style="font-size: 19px;">🔼 <span style="color: rgb(55, 177, 55);">Next</span>:</strong> Move
+                        forward to
+                        the next step
+                        or iteration.
+                    </li>
+                    <li class="instr-font">
+                        <strong style="font-size: 19px;">🔽 <span style="color: purple;">Prev</span>:</strong> Move
+                        back to the
+                        previous step
+                        or iteration.
+                    </li>
+                    <li class="instr-font">
+                        <strong style="font-size: 19px;">🔄 <span style="color: #f14668;">Reset</span>:</strong> Reset
+                        the
+                        simulation to its
+                        initial state.
+                    </li>
+
+                </ul>
+                <li class="instr-font">
+                    <strong style="font-size: 19px;">🔍 Clipping Flow</strong>:
+                    <ul style="list-style-type: disc; padding-left: 20px;">
+                        <li>Explore and interact with the current positions of shapes and lines using these coordinates.</li>
+                        <li>Clipping begins with line 1:</li>
+                        <ul style="list-style-type: circle; padding-left: 20px;">
+                            <li>Clip around the <span style="color: #eb3a13;">← left side</span>.</li>
+                            <li>Clip around the <span style="color: #3caa0a;">↓ top side</span>.</li>
+                            <li>Clip around the <span style="color: #0f44d6;">→ right side</span>.</li>
+                            <li>Clip around the <span style="color: #c41dc4;">↑ bottom side</span>.</li>
+                        </ul>
+                        <li>Continue with lines 2 to 5:</li>
+                        <ul style="list-style-type: circle; padding-left: 20px;">
+                            <li>Clip each line around the <span style="color: #eb3a13;">← left,</span> <span style="color: #3caa0a;">↓
+                                    top,</span> <span style="color: #0f44d6;">→ right,</span> and <span style="color: #c41dc4;">↑ bottom
+                                    sides</span> in sequence.</li>
+                        </ul>
+                        <li>When clipping is complete, the clipping window is surrounded with pink.</li>
+                    </ul>
+                </li>
+
+
+
+
+                <div style="background-color: #f0f0f0; padding: 5px; margin: 10px 0;">
+                    <p style="font-style: italic; text-align: center; margin: 0;">
+                        Note: This experiment simulation is optimized for desktop screens. While basic functionality is
+                        available on
+                        mobile devices, for the best experience, use a desktop or PC monitor.
+                    </p>
+                </div>
+            </ol>
+        </div>
+    </div>
+    </div>
 
     <div style="margin:auto; width: auto;">
         <button style="margin-left: 1%;" class="button is-small is-success is-responsive" id="next_button">Next</button>
         <button style="margin-left: 1%;" class="button is-small is-warning is-responsive" id="prev_button">Prev</button>
-        <button style="margin-left: 1%;" class="button is-small is-danger is-responsive" id="reset_button">Reset</button>
+        <button style="margin-left: 1%;" class="button is-small is-danger is-responsive"
+            id="reset_button">Reset</button>
     </div>
 
     <br>
 
     <div class="columns is-centered is-variable is-1-mobile is-flex is-flex-wrap-wrap workspace left">
 
-        <div id="observations" class="column has-text-centered is-2-desktop is-5-tablet is-one-thirds-mobile observations">
+        <div id="observations"
+            class="column has-text-centered is-2-desktop is-5-tablet is-one-thirds-mobile observations">
             <div class="v-datalist-container">
                 <div class="v-datalist-title">Input</div>
                 <div class="v-datalist-row">
-                    <p class="is-size-7-mobile" style="float: left;">Rectangular Co-ordinates:</p>
-                    <br> Top Left:
+                    <strong class="is-size-7-mobile" style="float: center; padding-bottom: 15px;">Rectangular Co-ordinates:</strong>
+                    <br>Top Left:
                     <div style="display: flexbox;">
-                        <input class="input is-small" style="width:30%" type="number" id="cnt-top-left-x" value="100" placeholder="X">
-                        <input class="input is-small" style="width:30%" type="number" id="cnt-top-left-y" value="100" placeholder="Y">
+                        <input class="input is-small" style="width:30%" type="number" id="cnt-top-left-x" value="100"
+                            placeholder="X">
+                        <input class="input is-small" style="width:30%" type="number" id="cnt-top-left-y" value="100"
+                            placeholder="Y">
                     </div>
                     Bottom Right:
                     <div style="display: flexbox;">
-                        <input class="input is-small" style="width:30%" type="number" id="cnt-bottom-right-x" value="600" placeholder="X">
-                        <input class="input is-small" style="width:30%" type="number" id="cnt-bottom-right-y" value="300" placeholder="Y">
+                        <input class="input is-small" style="width:30%" type="number" id="cnt-bottom-right-x"
+                            value="600" placeholder="X">
+                        <input class="input is-small" style="width:30%" type="number" id="cnt-bottom-right-y"
+                            value="300" placeholder="Y">
                     </div>
-                </d
-                <div class="v-datalist-row" id="top-border">
-                    <p style="float: left;">Polygon Co-ordinates:</p>
-                    <br>
+                    <br
+                    <div class="v-datalist-row" id="top-border">
+                    <strong style="float: center; padding-top: 10px;">Polygon Co-ordinates:</strong>
                     <div style="display: flexbox;">
-                        <input class="input is-small" style="width:30%" type="number" id="firstPointX" value="50" placeholder="X">
-                        <input class="input is-small" style="width:30%" type="number" id="firstPointY" value="450" placeholder="Y">
-                    </div>
-                    <div style="display: flexbox;">
-                        <input class="input is-small" style="width:30%" type="number" id="secondPointX" value="1020" placeholder="X">
-                        <input class="input is-small" style="width:30%" type="number" id="secondPointY" value="50" placeholder="Y">
-                    </div>
-                    <div style="display: flexbox;">
-                        <input class="input is-small" style="width:30%" type="number" id="thirdPointX" value="350" placeholder="X">
-                        <input class="input is-small" style="width:30%" type="number" id="thirdPointY" value="50" placeholder="Y">
+                        <input class="input is-small" style="width:30%" type="number" id="firstPointX" value="350"
+                            placeholder="X">
+                        <input class="input is-small" style="width:30%" type="number" id="firstPointY" value="350"
+                            placeholder="Y">
                     </div>
                     <div style="display: flexbox;">
-                        <input class="input is-small" style="width:30%" type="number" id="FourthPointX" value="250" placeholder="X">
-                        <input class="input is-small" style="width:30%" type="number" id="FourthPointY" value="80" placeholder="Y">
+                        <input class="input is-small" style="width:30%" type="number" id="secondPointX" value="500"
+                            placeholder="X">
+                        <input class="input is-small" style="width:30%" type="number" id="secondPointY" value="50"
+                            placeholder="Y">
                     </div>
                     <div style="display: flexbox;">
-                        <input class="input is-small" style="width:30%" type="number" id="FifthPointX" value="50" placeholder="X">
-                        <input class="input is-small" style="width:30%" type="number" id="FifthPointY" value="400" placeholder="Y">
+                        <input class="input is-small" style="width:30%" type="number" id="thirdPointX" value="350"
+                            placeholder="X">
+                        <input class="input is-small" style="width:30%" type="number" id="thirdPointY" value="50"
+                            placeholder="Y">
                     </div>
-
-                </div>
-
-                <button class="button is-small is-primary is-responsive" id="submit">Submit</button>
+                    <div style="display: flexbox;">
+                        <input class="input is-small" style="width:30%" type="number" id="FourthPointX" value="250"
+                            placeholder="X">
+                        <input class="input is-small" style="width:30%" type="number" id="FourthPointY" value="150"
+                            placeholder="Y">
+                    </div>
+                    <div style="display: flexbox;">
+                        <input class="input is-small" style="width:30%" type="number" id="FifthPointX" value="150"
+                            placeholder="X">
+                        <input class="input is-small" style="width:30%" type="number" id="FifthPointY" value="400"
+                            placeholder="Y">
+                    </div>
+                        <!-- <button onclick="startClipping()">Start Clipping</button> -->
+                        
+                        
+                    </div>
+                    
+                    <button class="button is-small is-primary is-responsive" id="submit">Submit</button>
+                    <div id="output"></div>
                 <p id="text" style="color:red"></p>
                 <p id="logic_text" style="color:blue"></p>
                 <p id="pointstat_text" style="color:green"></p>
