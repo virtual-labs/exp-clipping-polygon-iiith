@@ -78,3 +78,67 @@
 .v-checkbox {
     margin-bottom: 0.1rem;
 }
+
+#procedure-message {
+    display: none;
+    position: fixed;
+    max-width: 100vw; /* Full width */
+    max-height: 90vh; /* Prevent overflow */
+    overflow-y: auto; /* Scroll if content exceeds height */
+    background: linear-gradient(135deg, #f0f4f8, #d6e1e7); /* Gradient background */
+    z-index: 1000;
+    padding: 35px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2); /* Deeper shadow for more depth */
+    border-radius: 16px; /* Rounded corners for a smoother look */
+    text-align: left;
+    top: 45%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%);
+    animation: fadeIn 0.5s ease-out; /* Fade-in animation */
+    border: 2px solid #3498db; /* Border with a light blue color */
+}
+
+/* Add a subtle fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Optional: add hover effect */
+#procedure-message:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
+    transform: translate(-50%, -50%) scale(1.05); /* Slight zoom effect */
+}
+
+.instr-font {
+    font-size: 1rem;
+    color: #000;
+}
+
+
+.v-collapsible-instruction-container {
+  width: 60%;
+  margin: auto;
+  border-radius: 0.25rem;
+}
+
+.v-collapsible {
+  width: 98%;
+  margin: auto;
+}
+
+.v-collapsible::after {
+  size: 1rem;
+}
+
+#output {
+      padding: 10px;
+      margin: 10px;
+      border: 1px solid #ccc;
+      background-color: #f0f0f0;
+      font-family: Arial, sans-serif;
+    }

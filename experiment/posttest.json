@@ -5,7 +5,7 @@
             "question": "1. What are the two polygon clipping algorithms mentioned for removing parts outside the clipped window?",
             "answers": {
                 "a": "Bubble Sort and Quick Sort",
-                "b": "Sutherland-Hodgeman and Wiler-Atherton",
+                "b": "Sutherland-Hodgeman and Weiler-Atherton",
                 "c": "Binary Search and Linear Search",
                 "d": "Selection Sort and Merge Sort"
             },
@@ -19,7 +19,7 @@
             "question": "2. Which algorithm is NOT commonly used for polygon clipping?",
             "answers": {
                 "a": "Sutherland-Hodgeman algorithm",
-                "b": "Wiler-Atherton algorithm",
+                "b": "Weiler-Atherton algorithm",
                 "c": "Bresenham's Line Algorithm",
                 "d": "Cohen-Sutherland algorithm"
             },
