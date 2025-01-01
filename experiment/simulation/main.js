@@ -228,6 +228,8 @@ function check() {
     logicText.innerHTML = "";
     pointStatText.innerHTML = "";
     lineStatText.innerHTML = "";
+    var outputDiv = document.getElementById("output");
+    outputDiv.style.display = "block"; // Show the div
     startClipping();
     drawLine(
       topLeftRectX,
