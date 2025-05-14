@@ -21,7 +21,7 @@
                 "a": "Sutherland-Hodgeman algorithm",
                 "b": "Weiler-Atherton algorithm",
                 "c": "Bresenham's Line Algorithm",
-                "d": "Cohen-Sutherland algorithm"
+                "d": "Greiner–Hormann algorithm"
             },
             "correctAnswer": "c",
             "explanation": {
