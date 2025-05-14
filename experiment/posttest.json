@@ -58,7 +58,24 @@
             "difficulty": "advanced"
         },
         {
-            "question": "5. How does polygon clipping contribute to a more immersive visual experience in computer graphics?",
+            "question": "5. Which of the following algorithms is known for its efficiency in handling both convex and concave polygons?",
+            "answers": {
+              "a": "Cohen-Sutherland",
+              "b": "Liang-Barsky",
+              "c": "Nicholl-Lee-Nicholl",
+              "d": "Weiler-Atherton"
+            },
+            "correctAnswer": "d",
+            "explanations": {
+              "a": "Cohen-Sutherland is primarily used for line clipping, not polygons.",
+              "b": "Liang-Barsky is designed for line clipping, not polygons.",
+              "c": "Nicholl-Lee-Nicholl is focused on line clipping, not polygons.",
+              "d": "Correct! Weiler-Atherton algorithm efficiently handles both convex and concave polygons."
+            },
+            "difficulty": "advanced"
+          },
+        {
+            "question": "6. How does polygon clipping contribute to a more immersive visual experience in computer graphics?",
             "answers": {
                 "a": "By increasing computational complexity.",
                 "b": "By displaying the entire scene without restrictions.",
