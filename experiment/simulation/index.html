@@ -12,7 +12,6 @@
 <br>
 
 <body class="page has-text-centered">
-
     <div class="columns is-centered column">
         <div class="v-collapsible-instruction-container">
             <div class="v-collapsible" id="toggle-instructions"
@@ -105,19 +104,16 @@
             </ol>
         </div>
     </div>
-    </div>
 
-    <div style="margin:auto; width: auto;">
+    <!-- Desktop Navigation Buttons -->
+    <div class="is-hidden-mobile" style="margin:auto; width: auto;">
         <button style="margin-left: 1%;" class="button is-small is-success is-responsive" id="next_button">Next</button>
         <button style="margin-left: 1%;" class="button is-small is-warning is-responsive" id="prev_button">Prev</button>
-        <button style="margin-left: 1%;" class="button is-small is-danger is-responsive"
-                id="reset_button" onclick="location.reload()">Reset</button>
+        <button style="margin-left: 1%;" class="button is-small is-danger is-responsive" id="reset_button" onclick="location.reload()">Reset</button>
     </div>
 
-    <br>
-
     <div class="columns is-centered is-variable is-1-mobile is-flex is-flex-wrap-wrap workspace left">
-
+        <!-- Input Section -->
         <div id="observations"
             class="column has-text-centered is-2-desktop is-5-tablet is-one-thirds-mobile observations">
             <div class="v-datalist-container">
@@ -138,56 +134,69 @@
                         <input class="input is-small" style="width:30%" type="number" id="cnt-bottom-right-y"
                             value="300" placeholder="Y">
                     </div>
-                    <br
+                    <br>
                     <div class="v-datalist-row" id="top-border">
-                    <strong style="float: center; padding-top: 10px;">Polygon Co-ordinates:</strong>
-                    <div style="display: flexbox;">
-                        <input class="input is-small" style="width:30%" type="number" id="firstPointX" value="350"
-                            placeholder="X">
-                        <input class="input is-small" style="width:30%" type="number" id="firstPointY" value="350"
-                            placeholder="Y">
-                    </div>
-                    <div style="display: flexbox;">
-                        <input class="input is-small" style="width:30%" type="number" id="secondPointX" value="500"
-                            placeholder="X">
-                        <input class="input is-small" style="width:30%" type="number" id="secondPointY" value="50"
-                            placeholder="Y">
-                    </div>
-                    <div style="display: flexbox;">
-                        <input class="input is-small" style="width:30%" type="number" id="thirdPointX" value="350"
-                            placeholder="X">
-                        <input class="input is-small" style="width:30%" type="number" id="thirdPointY" value="50"
-                            placeholder="Y">
-                    </div>
-                    <div style="display: flexbox;">
-                        <input class="input is-small" style="width:30%" type="number" id="FourthPointX" value="250"
-                            placeholder="X">
-                        <input class="input is-small" style="width:30%" type="number" id="FourthPointY" value="150"
-                            placeholder="Y">
-                    </div>
-                    <div style="display: flexbox;">
-                        <input class="input is-small" style="width:30%" type="number" id="FifthPointX" value="150"
-                            placeholder="X">
-                        <input class="input is-small" style="width:30%" type="number" id="FifthPointY" value="400"
-                            placeholder="Y">
-                    </div>
-                        <!-- <button onclick="startClipping()">Start Clipping</button> -->
-                        
-                        
+                        <strong style="float: center; padding-top: 10px;">Polygon Co-ordinates:</strong>
+                        <div style="display: flexbox;">
+                            <input class="input is-small" style="width:30%" type="number" id="firstPointX" value="350"
+                                placeholder="X">
+                            <input class="input is-small" style="width:30%" type="number" id="firstPointY" value="350"
+                                placeholder="Y">
+                        </div>
+                        <div style="display: flexbox;">
+                            <input class="input is-small" style="width:30%" type="number" id="secondPointX" value="500"
+                                placeholder="X">
+                            <input class="input is-small" style="width:30%" type="number" id="secondPointY" value="50"
+                                placeholder="Y">
+                        </div>
+                        <div style="display: flexbox;">
+                            <input class="input is-small" style="width:30%" type="number" id="thirdPointX" value="350"
+                                placeholder="X">
+                            <input class="input is-small" style="width:30%" type="number" id="thirdPointY" value="50"
+                                placeholder="Y">
+                        </div>
+                        <div style="display: flexbox;">
+                            <input class="input is-small" style="width:30%" type="number" id="FourthPointX" value="250"
+                                placeholder="X">
+                            <input class="input is-small" style="width:30%" type="number" id="FourthPointY" value="150"
+                                placeholder="Y">
+                        </div>
+                        <div style="display: flexbox;">
+                            <input class="input is-small" style="width:30%" type="number" id="FifthPointX" value="150"
+                                placeholder="X">
+                            <input class="input is-small" style="width:30%" type="number" id="FifthPointY" value="400"
+                                placeholder="Y">
+                        </div>
                     </div>
                     
                     <button class="button is-small is-primary is-responsive" id="submit">Submit</button>
-                <div id="output" style="display: none;"></div>
-                <p id="text" style="color:red"></p>
-                <p id="logic_text" style="color:blue"></p>
-                <p id="pointstat_text" style="color:green"></p>
-                <p id="linestat_text" style="color:violet"></p>
+                    <div id="output" style="display: none;"></div>
+                    <p id="text" style="color:red"></p>
+                    <p id="logic_text" style="color:blue"></p>
+                    <p id="pointstat_text" style="color:green"></p>
+                    <p id="linestat_text" style="color:violet"></p>
+                    <div id="intermediate-vertices" class="v-datalist-row" style="margin-top: 15px;">
+                        <strong style="float: center;">Intermediate Vertices:</strong>
+                        <div id="current-vertices" style="font-size: 12px; color: yellow; margin-top: 5px;"></div>
+                    </div>
+                </div>
             </div>
         </div>
 
+        <!-- Mobile Navigation Buttons -->
+        <div class="is-hidden-tablet is-hidden-desktop" style="width: 100%; margin: 10px auto; text-align: center;">
+            <button class="button is-small is-success is-responsive" id="next_button_mobile">Next</button>
+            <button class="button is-small is-warning is-responsive" id="prev_button_mobile">Prev</button>
+            <button class="button is-small is-danger is-responsive" id="reset_button_mobile" onclick="location.reload()">Reset</button>
+        </div>
+
+        <!-- Canvas Section -->
         <div class="column is-8-desktop is-10-tablet is-10-mobile exp">
             <canvas class="v-canvas-container" id="canvas" style="border:2px solid #c3c3c3;"></canvas>
         </div>
-        <script src="main.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.8-b/js/script.js"></script>
     </div>
+
+    <script src="main.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.8-b/js/script.js"></script>
+</body>
+</html>

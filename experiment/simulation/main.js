@@ -93,6 +93,72 @@ let noOfIterations = 0,
   previousnoOfIterations = [];
 (transitionIteration = 0), (previoustransitionIteration = []);
 let noOfLinesClipped = 0;
+
+// Add new variables to track intermediate vertices
+let intermediateVertices = [];
+let currentIntermediateVertices = [];
+
+// Function to display intermediate vertices
+function displayIntermediateVertices(vertices, color = "yellow") {
+  // Clear previous vertices display
+  const currentVerticesDiv = document.getElementById("current-vertices");
+  currentVerticesDiv.innerHTML = "";
+  
+  // Draw vertices on canvas
+  ctx.fillStyle = color;
+  ctx.font = "12px Arial";
+  for (let i = 0; i < vertices.length; i++) {
+    const x = vertices[i].x;
+    const y = vertices[i].y;
+    
+    // Draw point on canvas
+    ctx.beginPath();
+    ctx.arc(x, y, 4, 0, 2 * Math.PI);
+    ctx.fill();
+    
+    // Draw coordinates next to point
+    ctx.fillText(`(${Math.round(x)},${Math.round(y)})`, x + 5, y - 5);
+    
+    // Add to HTML display
+    const vertexDiv = document.createElement("div");
+    vertexDiv.innerHTML = `<span class="vertex-point"></span>(${Math.round(x)}, ${Math.round(y)})`;
+    currentVerticesDiv.appendChild(vertexDiv);
+  }
+}
+
+// Function to update intermediate vertices display
+function updateIntermediateVerticesDisplay() {
+  if (currentIntermediateVertices.length > 0) {
+    // Clear previous canvas content
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Redraw the grid and clipping window
+    grid();
+    
+    // Draw the clipping window
+    drawLine(topLeftRectX, topLeftRectY, topLeftRectX, bottomRightRectY, 2, "#fb0483");
+    drawLine(bottomRightRectX, topLeftRectY, bottomRightRectX, bottomRightRectY, 2, "#fb0483");
+    drawLine(topLeftRectX, topLeftRectY, bottomRightRectX, topLeftRectY, 2, "#fb0483");
+    drawLine(topLeftRectX, bottomRightRectY, bottomRightRectX, bottomRightRectY, 2, "#fb0483");
+    
+    // Draw the current intermediate vertices
+    displayIntermediateVertices(currentIntermediateVertices);
+    
+    // Draw lines between vertices
+    ctx.beginPath();
+    ctx.moveTo(currentIntermediateVertices[0].x, currentIntermediateVertices[0].y);
+    for (let i = 1; i < currentIntermediateVertices.length; i++) {
+      ctx.lineTo(currentIntermediateVertices[i].x, currentIntermediateVertices[i].y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = "yellow";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+}
+
 function convertToBinary(x) {
   let bin = "";
   for (let i = 3; i >= 0; i--) {
@@ -266,7 +332,7 @@ function check() {
     drawLine(
       topLeftRectX,
       topLeftRectY,
-      bottomleft_rect_x,
+      bottomRightRectX,
       bottomRightRectY,
       2,
       "#fb0483"
@@ -1322,192 +1388,158 @@ function moveToNextLine() {
   }
 }
 
-
-
 function startClipping() {
-  // Fetch polygon vertices from input fields
-  let polygonVertices = [
-    [
-      parseInt(document.getElementById("firstPointX").value),
-      parseInt(document.getElementById("firstPointY").value),
-    ],
-    [
-      parseInt(document.getElementById("secondPointX").value),
-      parseInt(document.getElementById("secondPointY").value),
-    ],
-    [
-      parseInt(document.getElementById("thirdPointX").value),
-      parseInt(document.getElementById("thirdPointY").value),
-    ],
-    [
-      parseInt(document.getElementById("FourthPointX").value),
-      parseInt(document.getElementById("FourthPointY").value),
-    ],
-    [
-      parseInt(document.getElementById("FifthPointX").value),
-      parseInt(document.getElementById("FifthPointY").value),
-    ],
-  ];
-
-  // Fetch clipping window coordinates
-  let xmin = parseInt(document.getElementById("cnt-top-left-x").value);
-  let ymin = parseInt(document.getElementById("cnt-top-left-y").value);
-  let xmax = parseInt(document.getElementById("cnt-bottom-right-x").value);
-  let ymax = parseInt(document.getElementById("cnt-bottom-right-y").value);
-
-  console.log("Polygon Vertices:", polygonVertices);
-  console.log("Clipping Window:", xmin, ymin, xmax, ymax);
-
-  // Perform polygon clipping
-  let clippedVertices = clipPolygonSutherlandHodgeman(
-    polygonVertices,
-    xmin,
-    ymin,
-    xmax,
-    ymax
+  const vertices = [];
+  for (let i = 0; i < noofLines; i++) {
+    vertices.push({ x: PointsX[i], y: PointsY[i] });
+  }
+  
+  // Clear the canvas
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "black";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  // Draw the grid and clipping window
+  grid();
+  
+  // Draw the clipping window
+  drawLine(topLeftRectX, topLeftRectY, topLeftRectX, bottomRightRectY, 2, "#fb0483");
+  drawLine(bottomRightRectX, topLeftRectY, bottomRightRectX, bottomRightRectY, 2, "#fb0483");
+  drawLine(topLeftRectX, topLeftRectY, bottomRightRectX, topLeftRectY, 2, "#fb0483");
+  drawLine(topLeftRectX, bottomRightRectY, bottomRightRectX, bottomRightRectY, 2, "#fb0483");
+  
+  const clippedVertices = clipPolygonSutherlandHodgeman(
+    vertices,
+    topLeftRectX,
+    topLeftRectY,
+    bottomRightRectX,
+    bottomRightRectY
   );
-
-  // Display the clipped polygon vertices
-  console.log("Clipped Vertices:", clippedVertices);
-  displayClippedVertices(clippedVertices);
+  
+  // Draw the final clipped polygon
+  ctx.beginPath();
+  ctx.moveTo(clippedVertices[0].x, clippedVertices[0].y);
+  for (let i = 1; i < clippedVertices.length; i++) {
+    ctx.lineTo(clippedVertices[i].x, clippedVertices[i].y);
+  }
+  ctx.closePath();
+  ctx.strokeStyle = "white";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  
+  // Display final vertices
+  displayIntermediateVertices(clippedVertices, "white");
 }
 
 function clipPolygonSutherlandHodgeman(vertices, xmin, ymin, xmax, ymax) {
-  if (vertices.length === 0) return [];
-
-  let clippedVertices = vertices.slice();
-
-  // Clip against each edge in order
-  clippedVertices = clipAgainstBottom(clippedVertices, ymin);
-  if (clippedVertices.length === 0) return [];
-  console.log("After clipping against bottom:", clippedVertices);
-
-  clippedVertices = clipAgainstRight(clippedVertices, xmax);
-  if (clippedVertices.length === 0) return [];
-  console.log("After clipping against right:", clippedVertices);
-
-  clippedVertices = clipAgainstTop(clippedVertices, ymax);
-  if (clippedVertices.length === 0) return [];
-  console.log("After clipping against top:", clippedVertices);
-
-  clippedVertices = clipAgainstLeft(clippedVertices, xmin);
-
-  // Remove any vertex that isn't part of an actual line segment
-  return (clippedVertices);
-}
-
-
-function clipAgainstBottom(vertices, ymin) {
-  let outputVertices = [];
-  let prevVertex = vertices[vertices.length - 1];
-
-  for (let currentVertex of vertices) {
-    let prevAbove = prevVertex[1] >= ymin;
-    let currentAbove = currentVertex[1] >= ymin;
-
-    if (prevAbove && currentAbove) {
-      outputVertices.push(currentVertex);
-    } else if (!prevAbove && currentAbove) {
-      let t = (ymin - prevVertex[1]) / (currentVertex[1] - prevVertex[1]);
-      let intersectX = prevVertex[0] + t * (currentVertex[0] - prevVertex[0]);
-      outputVertices.push([intersectX, ymin]);
-      outputVertices.push(currentVertex);
-    } else if (prevAbove && !currentAbove) {
-      let t = (ymin - prevVertex[1]) / (currentVertex[1] - prevVertex[1]);
-      let intersectX = prevVertex[0] + t * (currentVertex[0] - prevVertex[0]);
-      outputVertices.push([intersectX, ymin]);
-      // currentVertex = [intersectX, ymin];
-    }
-
-    prevVertex = currentVertex;
-  }
-
-  return outputVertices;
-}
-
-function clipAgainstRight(vertices, xmax) {
-  let outputVertices = [];
-  let prevVertex = vertices[vertices.length - 1];
-
-  for (let currentVertex of vertices) {
-    let prevLeft = prevVertex[0] <= xmax;
-    let currentLeft = currentVertex[0] <= xmax;
-
-    if (prevLeft && currentLeft) {
-      outputVertices.push(currentVertex);
-    } else if (!prevLeft && currentLeft) {
-      let t = (xmax - prevVertex[0]) / (currentVertex[0] - prevVertex[0]);
-      let intersectY = prevVertex[1] + t * (currentVertex[1] - prevVertex[1]);
-      outputVertices.push([xmax, intersectY]);
-      outputVertices.push(currentVertex);
-      
-    } else if (prevLeft && !currentLeft) {
-      let t = (xmax - prevVertex[0]) / (currentVertex[0] - prevVertex[0]);
-      let intersectY = prevVertex[1] + t * (currentVertex[1] - prevVertex[1]);
-      outputVertices.push([xmax, intersectY]);
-      // currentVertex=[xmax, intersectY];
-    }
-
-    prevVertex = currentVertex;
-  }
-
-  return outputVertices;
-}
-
-function clipAgainstTop(vertices, ymax) {
-  let outputVertices = [];
-  let prevVertex = vertices[vertices.length - 1];
-
-  for (let currentVertex of vertices) {
-    let prevBelow = prevVertex[1] <= ymax;
-    let currentBelow = currentVertex[1] <= ymax;
-
-    if (prevBelow && currentBelow) {
-      outputVertices.push(currentVertex);
-    } else if (!prevBelow && currentBelow) {
-      let t = (ymax - prevVertex[1]) / (currentVertex[1] - prevVertex[1]);
-      let intersectX = prevVertex[0] + t * (currentVertex[0] - prevVertex[0]);
-      outputVertices.push([intersectX, ymax]);
-      outputVertices.push(currentVertex);
-    } else if (prevBelow && !currentBelow) {
-      let t = (ymax - prevVertex[1]) / (currentVertex[1] - prevVertex[1]);
-      let intersectX = prevVertex[0] + t * (currentVertex[0] - prevVertex[0]);
-      outputVertices.push([intersectX, ymax]);
-      // currentVertex = [intersectX, ymax];
-    }
-
-    prevVertex = currentVertex;
-  }
-
-  return outputVertices;
+  let result = vertices;
+  currentIntermediateVertices = [...vertices];
+  
+  // Show initial vertices
+  updateIntermediateVerticesDisplay();
+  
+  // Clip against each boundary
+  result = clipAgainstLeft(result, xmin);
+  currentIntermediateVertices = [...result];
+  updateIntermediateVerticesDisplay();
+  
+  result = clipAgainstTop(result, ymax);
+  currentIntermediateVertices = [...result];
+  updateIntermediateVerticesDisplay();
+  
+  result = clipAgainstRight(result, xmax);
+  currentIntermediateVertices = [...result];
+  updateIntermediateVerticesDisplay();
+  
+  result = clipAgainstBottom(result, ymin);
+  currentIntermediateVertices = [...result];
+  updateIntermediateVerticesDisplay();
+  
+  return result;
 }
 
 function clipAgainstLeft(vertices, xmin) {
-  let outputVertices = [];
-  let prevVertex = vertices[vertices.length - 1];
-
-  for (let currentVertex of vertices) {
-    let prevRight = prevVertex[0] >= xmin;
-    let currentRight = currentVertex[0] >= xmin;
-
-    if (prevRight && currentRight) {
-      outputVertices.push(currentVertex);
-    } else if (!prevRight && currentRight) {
-      let t = (xmin - prevVertex[0]) / (currentVertex[0] - prevVertex[0]);
-      let intersectY = prevVertex[1] + t * (currentVertex[1] - prevVertex[1]);
-      outputVertices.push([xmin, intersectY]);
-      outputVertices.push(currentVertex);
-    } else if (prevRight && !currentRight) {
-      let t = (xmin - prevVertex[0]) / (currentVertex[0] - prevVertex[0]);
-      let intersectY = prevVertex[1] + t * (currentVertex[1] - prevVertex[1]);
-      outputVertices.push([xmin, intersectY]);
-      // currentVertex = [xmin, intersectY];
+  let result = [];
+  for (let i = 0; i < vertices.length; i++) {
+    const current = vertices[i];
+    const next = vertices[(i + 1) % vertices.length];
+    
+    if (current.x >= xmin) {
+      result.push(current);
     }
-
-    prevVertex = currentVertex;
+    
+    if ((current.x < xmin && next.x >= xmin) || (current.x >= xmin && next.x < xmin)) {
+      const intersection = {
+        x: xmin,
+        y: current.y + (next.y - current.y) * (xmin - current.x) / (next.x - current.x)
+      };
+      result.push(intersection);
+    }
   }
+  return result;
+}
 
-  return outputVertices;
+function clipAgainstTop(vertices, ymax) {
+  let result = [];
+  for (let i = 0; i < vertices.length; i++) {
+    const current = vertices[i];
+    const next = vertices[(i + 1) % vertices.length];
+    
+    if (current.y <= ymax) {
+      result.push(current);
+    }
+    
+    if ((current.y > ymax && next.y <= ymax) || (current.y <= ymax && next.y > ymax)) {
+      const intersection = {
+        x: current.x + (next.x - current.x) * (ymax - current.y) / (next.y - current.y),
+        y: ymax
+      };
+      result.push(intersection);
+    }
+  }
+  return result;
+}
+
+function clipAgainstRight(vertices, xmax) {
+  let result = [];
+  for (let i = 0; i < vertices.length; i++) {
+    const current = vertices[i];
+    const next = vertices[(i + 1) % vertices.length];
+    
+    if (current.x <= xmax) {
+      result.push(current);
+    }
+    
+    if ((current.x > xmax && next.x <= xmax) || (current.x <= xmax && next.x > xmax)) {
+      const intersection = {
+        x: xmax,
+        y: current.y + (next.y - current.y) * (xmax - current.x) / (next.x - current.x)
+      };
+      result.push(intersection);
+    }
+  }
+  return result;
+}
+
+function clipAgainstBottom(vertices, ymin) {
+  let result = [];
+  for (let i = 0; i < vertices.length; i++) {
+    const current = vertices[i];
+    const next = vertices[(i + 1) % vertices.length];
+    
+    if (current.y >= ymin) {
+      result.push(current);
+    }
+    
+    if ((current.y < ymin && next.y >= ymin) || (current.y >= ymin && next.y < ymin)) {
+      const intersection = {
+        x: current.x + (next.x - current.x) * (ymin - current.y) / (next.y - current.y),
+        y: ymin
+      };
+      result.push(intersection);
+    }
+  }
+  return result;
 }
 
 function displayClippedVertices(vertices) {
@@ -1518,5 +1550,10 @@ function displayClippedVertices(vertices) {
     outputDiv.innerHTML += `(${flooredX}, ${flooredY}),`;
   }
 }
+
+// Add event listeners for mobile buttons
+document.getElementById("next_button_mobile").addEventListener("click", check);
+document.getElementById("prev_button_mobile").addEventListener("click", previousLineChange);
+document.getElementById("reset_button_mobile").addEventListener("click", () => location.reload());
 
 
