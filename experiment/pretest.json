@@ -1,30 +1,75 @@
-[
-{"question":"1. The Sutherland Hodgeman works for the following cases :",
-"answers":{
-            "a":"Convex Polygon with convex clip window",
-            "b":"Concave polygon with convex clip window",
-            "c":"Convex polygon with concave clip window",
-            "d":"a and b",
-            "e":"a and c",
-            "f":"All of the above"
+{
+  "version": 1.0,
+  "questions": [
+      {
+          "question": "1. What is the primary purpose of polygon clipping in computer graphics?",
+          "answers": {
+              "a": "To increase the computational complexity of rendering.",
+              "b": "To render unnecessary parts of a scene outside the display area.",
+              "c": "To add more details to the displayed image.",
+              "d": "To enlarge the display area for better visibility."
           },
-"correctAnswer":"a"},
-
-{"question":"2. Will the output matter on the order in which we process the polygon?",
-"answers":{
-            "a":"Yes",
-            "b":"No"
+          "correctAnswer": "b",
+          "explanation": {
+              "b": "Polygon clipping is used to remove unnecessary parts of a scene lying outside the display area, reducing computational load and improving rendering efficiency."
           },
-"correctAnswer":"c"},
-
-{"question":"3. Let m be the slope of the line joining clip polygon point Pi(x1, y1) and Pi+1(x2, y2). The intersection point of this line with the Left side of clip window is : ",
-"answers":{
-            "a":"x = xmin; y = (int)(y2 + ((xmin - x2)*m));",
-            "b":"x = xmax; y = (int)(y2 + ((xmax - x2)*m));",
-            "c":"x = x2; y = ymin;",
-            "d":"x = (int)(x2 + ((ymax - y2)/m)); y = ymax;"
+          "difficulty": "beginner"
+      },
+      {
+          "question": "2. Which term is commonly used for the area where the image is displayed in computer graphics?",
+          "answers": {
+              "a": "Clipped Window",
+              "b": "Rendering Space",
+              "c": "Viewport",
+              "d": "Display Frame"
           },
-"correctAnswer":"a"} 
-
-
-]
+          "correctAnswer": "c",
+          "explanation": {
+              "c": "The area where the image is displayed in computer graphics is commonly referred to as the viewport."
+          },
+          "difficulty": "beginner"
+      },
+      {
+          "question": "3. In the context of polygon clipping, what is the primary focus of the Sutherland-Hodgeman Algorithm?",
+          "answers": {
+              "a": "Sorting polygons in ascending order.",
+              "b": "Clipping lines within the polygon.",
+              "c": "Removing segments of a polygon outside the clipped window.",
+              "d": "Calculating the polygon area."
+          },
+          "correctAnswer": "c",
+          "explanation": {
+              "c": "The Sutherland-Hodgeman Algorithm is specifically designed for removing segments of a polygon that extend beyond the boundaries of the clipped window."
+          },
+          "difficulty": "intermediate"
+      },
+      {
+          "question": "4. What is the significance of polygon clipping in the context of visual rendering?",
+          "answers": {
+              "a": "It increases computational load.",
+              "b": "It enhances image resolution.",
+              "c": "It reduces unnecessary computations and optimizes rendering.",
+              "d": "It expands the display area."
+          },
+          "correctAnswer": "c",
+          "explanation": {
+              "c": "Polygon clipping reduces unnecessary computations by removing parts outside the clipped window, thereby optimizing the rendering process."
+          },
+          "difficulty": "intermediate"
+      },
+      {
+          "question": "5. What is a potential drawback of neglecting polygon clipping in visual rendering?",
+          "answers": {
+              "a": "Enhanced image quality.",
+              "b": "Improved computational efficiency.",
+              "c": "Visible artifacts and increased computational load.",
+              "d": "Wider display area."
+          },
+          "correctAnswer": "c",
+          "explanation": {
+              "c": "Neglecting polygon clipping may lead to visible artifacts and an increased computational load, compromising the overall quality of visual rendering."
+          },
+          "difficulty": "advanced"
+      }
+  ]
+}

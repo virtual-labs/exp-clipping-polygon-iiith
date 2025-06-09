@@ -1,0 +1,92 @@
+{
+    "version": 1.0,
+    "questions": [
+        {
+            "question": "1. What are the two polygon clipping algorithms mentioned for removing parts outside the clipped window?",
+            "answers": {
+                "a": "Bubble Sort and Quick Sort",
+                "b": "Sutherland-Hodgeman and Weiler-Atherton",
+                "c": "Binary Search and Linear Search",
+                "d": "Selection Sort and Merge Sort"
+            },
+            "correctAnswer": "b",
+            "explanation": {
+                "b": "Sutherland-Hodgeman and Wiler-Atherton are two common algorithms used for polygon clipping."
+            },
+            "difficulty": "beginner"
+        },
+        {
+            "question": "2. Which algorithm is NOT commonly used for polygon clipping?",
+            "answers": {
+                "a": "Sutherland-Hodgeman algorithm",
+                "b": "Weiler-Atherton algorithm",
+                "c": "Bresenham's Line Algorithm",
+                "d": "Greiner–Hormann algorithm"
+            },
+            "correctAnswer": "c",
+            "explanation": {
+                "c": "Bresenham's Line Algorithm is not a polygon clipping algorithm; it is primarily used for drawing lines."
+            },
+            "difficulty": "intermediate"
+        },
+        {
+            "question": "3. In the context of computer graphics, why is polygon clipping essential for optimization?",
+            "answers": {
+                "a": "To increase image complexity.",
+                "b": "To introduce visual artifacts.",
+                "c": "To reduce computational load and improve rendering efficiency.",
+                "d": "To enlarge the display area."
+            },
+            "correctAnswer": "c",
+            "explanation": {
+                "c": "Polygon clipping is crucial for optimization as it reduces unnecessary computations, leading to improved rendering efficiency."
+            },
+            "difficulty": "intermediate"
+        },
+        {
+            "question": "4. Explain the concept of a clipped window in the context of computer graphics.",
+            "answers": {
+                "a": "A window with broken glass.",
+                "b": "A window that cannot be resized.",
+                "c": "The display area on a computer screen for rendering images.",
+                "d": "A window with no display area limitations."
+            },
+            "correctAnswer": "c",
+            "explanation": {
+                "c": "In computer graphics, a clipped window refers to the designated display area on a computer screen used for rendering images."
+            },
+            "difficulty": "advanced"
+        },
+        {
+            "question": "5. Which of the following algorithms is known for its efficiency in handling both convex and concave polygons?",
+            "answers": {
+              "a": "Cohen-Sutherland",
+              "b": "Liang-Barsky",
+              "c": "Nicholl-Lee-Nicholl",
+              "d": "Weiler-Atherton"
+            },
+            "correctAnswer": "d",
+            "explanations": {
+              "a": "Cohen-Sutherland is primarily used for line clipping, not polygons.",
+              "b": "Liang-Barsky is designed for line clipping, not polygons.",
+              "c": "Nicholl-Lee-Nicholl is focused on line clipping, not polygons.",
+              "d": "Correct! Weiler-Atherton algorithm efficiently handles both convex and concave polygons."
+            },
+            "difficulty": "advanced"
+          },
+        {
+            "question": "6. How does polygon clipping contribute to a more immersive visual experience in computer graphics?",
+            "answers": {
+                "a": "By increasing computational complexity.",
+                "b": "By displaying the entire scene without restrictions.",
+                "c": "By removing unnecessary elements outside the display area, enhancing realism.",
+                "d": "By enlarging the display area for a broader view."
+            },
+            "correctAnswer": "c",
+            "explanation": {
+                "c": "Polygon clipping contributes to a more immersive visual experience by removing unnecessary elements outside the display area, enhancing realism and optimizing the rendering process."
+            },
+            "difficulty": "advanced"
+        }
+    ]
+}
