@@ -1,66 +1,79 @@
-**Procedure: Sutherland-Hodgeman Polygon Clipping Experiment**
+## Procedure: Sutherland-Hodgman Polygon Clipping Experiment
 
-1. **Set Up Clipping Window:**
-   - Enter the coordinates for the clipping window in the input boxes:
-     - Top Left: (X, Y) coordinates of the upper-left corner
-     - Bottom Right: (X, Y) coordinates of the lower-right corner
-   - The clipping window will be displayed as a pink rectangle on the canvas
+### Step 1: Initial Setup
+1. Open the simulation page
+2. You will see:
+   - A canvas area on the left
+   - Input controls on the right
+   - Navigation buttons at the bottom
 
-2. **Configure Polygon:**
-   - Enter the coordinates for a 5-point polygon in the input boxes:
-     - Each point requires X and Y coordinates
-     - Points are connected in order, with the last point connecting back to the first
-   - Default values are provided for both the clipping window and polygon
-   - Click "Submit" to initialize the simulation
+### Step 2: Configure Clipping Window
+1. Locate the "Clipping Window" section
+2. Enter coordinates for:
+   - Top Left Corner $(x_1, y_1)$
+   - Bottom Right Corner $(x_2, y_2)$
+3. Default values are provided for quick start
 
-3. **Observe the Clipping Process:**
-   - Click "Next" to progress through each step of the algorithm
-   - At each step, observe:
-     - Yellow dots showing current vertex positions
-     - Yellow lines connecting the vertices
-     - Vertex coordinates displayed next to each point
-     - The "Intermediate Vertices" panel showing the current set of vertices
-   
-   The clipping process follows this sequence:
-   a. Initial polygon vertices (shown in yellow)
-   b. After clipping against left edge
-   c. After clipping against top edge
-   d. After clipping against right edge
-   e. After clipping against bottom edge
-   f. Final clipped polygon (shown in white)
+### Step 3: Define Polygon
+1. Find the "Polygon Points" section
+2. Enter coordinates for 5 points:
+   - Point 1 $(x_1, y_1)$
+   - Point 2 $(x_2, y_2)$
+   - Point 3 $(x_3, y_3)$
+   - Point 4 $(x_4, y_4)$
+   - Point 5 $(x_5, y_5)$
+3. Default values are available
 
-4. **Understanding the Visualization:**
-   - Yellow dots: Current intermediate vertices
-   - Yellow lines: Connections between current vertices
+### Step 4: Start Simulation
+1. Click the "Submit" button
+2. Observe:
+   - Pink rectangle showing clipping window
+   - Yellow dots and lines showing initial polygon
+   - Coordinate labels for each vertex
+
+### Step 5: Run the Experiment
+1. Click "Next" to progress through steps:
+   - Initial polygon state
+   - After left edge clipping $(x = x_{min})$
+   - After top edge clipping $(y = y_{max})$
+   - After right edge clipping $(x = x_{max})$
+   - After bottom edge clipping $(y = y_{min})$
+   - Final clipped polygon
+
+2. At each step, observe:
+   - Yellow dots: Current vertices
+   - Yellow lines: Current edges
    - White lines: Final clipped polygon
-   - Pink rectangle: Clipping window
-   - Coordinate labels: Show exact position of each vertex
-   - Intermediate Vertices panel: Lists all current vertex coordinates
+   - Intermediate Vertices panel: Current vertex coordinates
 
-5. **Navigation Controls:**
-   - "Next": Move forward to the next clipping step
-   - "Prev": Go back to the previous step
-   - "Reset": Start over with the same coordinates
-   - Each step shows the transformation of vertices as the algorithm progresses
+### Step 6: Navigation
+1. Use "Next" to move forward
+2. Use "Prev" to review previous steps
+3. Use "Reset" to start over
+4. Use "Submit" to try new coordinates
 
-6. **Experiment with Different Configurations:**
-   - After completing one experiment, you can:
-     - Modify the clipping window coordinates
-     - Change the polygon vertices
-     - Click "Submit" to start a new experiment
-   - Observe how different polygon shapes are clipped against the same window
-   - Try polygons that intersect the clipping window in different ways
+### Step 7: Experiment with Different Cases
+1. Try different polygon shapes:
+   - Completely inside window $(x_{min} \leq x \leq x_{max}, y_{min} \leq y \leq y_{max})$
+   - Partially intersecting window
+   - Completely outside window
+2. Modify clipping window size
+3. Observe how different configurations affect the result
 
-7. **Key Observations to Make:**
-   - How vertices are added or removed during clipping
-   - Where new vertices are created at intersection points
-   - How the polygon shape changes after each clipping step
-   - The relationship between the original polygon and the final clipped result
+### Step 8: Understanding the Output
+1. Watch the "Intermediate Vertices" panel:
+   - Shows current vertex coordinates $(x_i, y_i)$
+   - Updates with each step
+   - Helps track vertex changes
 
-8. **Tips for Best Results:**
-   - Use the "Prev" button to review any step in detail
-   - Pay attention to the vertex coordinates in both the canvas and the panel
-   - Notice how the algorithm handles vertices that are inside vs. outside the clipping window
-   - Observe the creation of new vertices at intersection points
+2. Observe the canvas:
+   - Yellow elements show current state
+   - White elements show final result
+   - Coordinate labels help track positions
 
-This procedure guides you through the Sutherland-Hodgeman Polygon Clipping Experiment, with a focus on understanding the step-by-step transformation of the polygon through the clipping process. The intermediate vertex visualization helps in understanding how the algorithm works and how the final clipped polygon is constructed.
+## Tips for Best Results
+1. Start with default values to understand the process
+2. Use "Prev" to review any step in detail
+3. Pay attention to vertex coordinate changes
+4. Try different polygon configurations
+5. Observe how intersection points are created
