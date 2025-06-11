@@ -1,0 +1,27 @@
+
+/home/runner/work/exp-clipping-polygon-iiith/exp-clipping-polygon-iiith/experiment/simulation/js/main.js
+    20:5   warning  'x' is assigned a value but never used                     no-unused-vars
+    21:5   warning  'y' is assigned a value but never used                     no-unused-vars
+    24:5   warning  'previousLine' is assigned a value but never used          no-unused-vars
+    83:5   warning  'inside' is assigned a value but never used                no-unused-vars
+    89:5   warning  'ifCompleted' is assigned a value but never used           no-unused-vars
+    94:2   warning  'transitionIteration' is not defined                       no-undef
+    94:29  warning  'previoustransitionIteration' is not defined               no-undef
+    98:5   warning  'intermediateVertices' is assigned a value but never used  no-unused-vars
+   166:10  warning  'convertToBinary' is defined but never used                no-unused-vars
+   227:10  warning  'chooseLine' is defined but never used                     no-unused-vars
+   311:26  warning  'transitionIteration' is not defined                       no-undef
+   399:5   warning  'transitionIteration' is not defined                       no-undef
+   887:4   warning  'transitionIteration' is not defined                       no-undef
+   887:31  warning  'previoustransitionIteration' is not defined               no-undef
+   903:10  warning  'redraw' is defined but never used                         no-unused-vars
+  1038:3   warning  'transitionIteration' is not defined                       no-undef
+  1078:3   warning  'previoustransitionIteration' is not defined               no-undef
+  1078:46  warning  'transitionIteration' is not defined                       no-undef
+  1092:3   warning  'transitionIteration' is not defined                       no-undef
+  1119:10  warning  'startClipping' is defined but never used                  no-unused-vars
+  1273:10  warning  'displayClippedVertices' is defined but never used         no-unused-vars
+  1313:10  warning  'initializeStepHistory' is defined but never used          no-unused-vars
+
+✖ 22 problems (0 errors, 22 warnings)
+

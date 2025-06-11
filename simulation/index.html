@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.8-b/css/style.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.5-b/css/style.min.css">
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+
+<body class="page has-text-centered">
+    <div class="columns is-centered is-flex column">
+        <div class="mb-3 column has-text-centered">
+            <div class="v-collapsible-instruction-container">
+                <div class="v-collapsible" id="toggle-instructions"
+                    style="cursor: pointer; background: #f1f1f1; padding: 10px; border-radius: 5px;">
+                    <strong>Instructions</strong>
+                </div>
+            </div>
+
+            <!-- Fullscreen Instructions Modal -->
+            <div id="procedure-message" class="v-content">
+                <ol>
+                    <li class="instr-font">
+                        <strong style="font-size: 19px;">📏 Clipping Rectangle Coordinates</strong>:
+                        <ul style="list-style-type: disc; padding-left: 20px;">
+                            <li><strong>Top Left</strong>: The coordinates of the upper-left corner of the clipping area.</li>
+                            <li><strong>Bottom Right</strong>: The coordinates of the lower-right corner of the clipping area.</li>
+                        </ul>
+                    </li>
+                    <li class="instr-font">
+                        <strong style="font-size: 19px;">🔷 Polygon Coordinates</strong>:
+                        <ul style="list-style-type: disc; padding-left: 20px;">
+                            <li>Defines the X and Y positions of each vertex.</li>
+                            <li>A 5-point polygon has 5 coordinate pairs to form a closed shape.</li>
+                        </ul>
+                    </li>
+                    <li class="instr-font">
+                        <strong style="font-size: 19px;">🚀 Getting Started</strong>:
+                        <p>To begin, set the clipping window and polygon coordinates, then press <strong style="color: #04aa6d;">Submit</strong>.
+                            Use the controls below to navigate through the simulation:</p>
+                    </li>
+                    <ul style="list-style-type: disc; padding-left: 20px;">
+                        <li class="instr-font">
+                            <strong style="font-size: 19px;">🔼 <span style="color: #3298dc;">Next</span>:</strong> Move forward to the next step or iteration.
+                        </li>
+                        <li class="instr-font">
+                            <strong style="font-size: 19px;">🔽 <span style="color: #48c774;">Prev</span>:</strong> Move back to the previous step or iteration.
+                        </li>
+                        <li class="instr-font">
+                            <strong style="font-size: 19px;">🔄 <span style="color: #f14668;">Reset</span>:</strong> Reset the simulation to its initial state.
+                        </li>
+                    </ul>
+                    <li class="instr-font">
+                        <strong style="font-size: 19px;">🔍 Clipping Flow</strong>:
+                        <ul style="list-style-type: disc; padding-left: 20px;">
+                            <li>Explore and interact with the current positions of shapes and lines using these coordinates.</li>
+                            <li>Clipping begins with line 1:</li>
+                            <ul style="list-style-type: circle; padding-left: 20px;">
+                                <li>Clip around the <span style="color: #eb3a13;">← left side</span>.</li>
+                                <li>Clip around the <span style="color: #3caa0a;">↓ top side</span>.</li>
+                                <li>Clip around the <span style="color: #0f44d6;">→ right side</span>.</li>
+                                <li>Clip around the <span style="color: #c41dc4;">↑ bottom side</span>.</li>
+                            </ul>
+                            <li>Continue with lines 2 to 5:</li>
+                            <ul style="list-style-type: circle; padding-left: 20px;">
+                                <li>Clip each line around the <span style="color: #eb3a13;">← left,</span> <span style="color: #3caa0a;">↓ top,</span> <span style="color: #0f44d6;">→ right,</span> and <span style="color: #c41dc4;">↑ bottom sides</span> in sequence.</li>
+                            </ul>
+                            <li>When clipping is complete, the clipping window is surrounded with pink.</li>
+                        </ul>
+                    </li>
+                    <div style="background-color: #f0f0f0; padding: 5px; margin: 10px 0;">
+                        <p style="font-style: italic; text-align: center; margin: 0;">
+                            Note: This experiment simulation is optimized for desktop screens. While basic functionality is available on mobile devices, for the best experience, use a desktop or PC monitor.
+                        </p>
+                    </div>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <div class="columns is-centered is-variable is-1-mobile is-flex is-flex-wrap-wrap workspace left">
+        <!-- Left Column - Controls -->
+        <div id="left" class="column has-text-centered is-2-desktop is-5-tablet is-10-mobile apparatus">
+            <div class="v-datalist-container">
+                <div class="v-datalist-title is-size-8-mobile">Input</div>
+                <div class="v-datalist-row">
+                    <div>
+                        <p class="float:is-centered">Clipping Rectangle Coordinates</p>
+                        <div class="mb-3 v-datalist-row">
+                            <div class="mb-3">
+                                <label for="cnt-top-left-x">Top-Left</label><br>
+                                <span>X:</span><input class="input is-small" style="width: 30%" type="number" id="cnt-top-left-x" value="100" placeholder="X" min="60" max="1195" />
+                                <span>Y:</span><input class="input is-small" style="width: 30%" type="number" id="cnt-top-left-y" value="100" placeholder="Y" min="20" max="490" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="cnt-bottom-right-x">Bottom-Right</label><br>
+                                <span>X:</span><input class="input is-small" style="width: 30%" type="number" id="cnt-bottom-right-x" value="600" placeholder="X" min="60" max="1195" />
+                                <span>Y:</span><input class="input is-small" style="width: 30%" type="number" id="cnt-bottom-right-y" value="300" placeholder="Y" min="20" max="490" />
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="mb-3 v-datalist-row" id="top-border">
+                            <div class="mb-3">
+                                <p style="float: is-centered">Polygon Coordinates:</p>
+                            </div>
+                            <div class="mb-3">
+                                <label>Point 1:</label>
+                                <input class="input is-small" style="width: 30%" type="number" id="firstPointX" value="350" placeholder="X" />
+                                <input class="input is-small" style="width: 30%" type="number" id="firstPointY" value="350" placeholder="Y" />
+                            </div>
+                            <div class="mb-3">
+                                <label>Point 2:</label>
+                                <input class="input is-small" style="width: 30%" type="number" id="secondPointX" value="500" placeholder="X" />
+                                <input class="input is-small" style="width: 30%" type="number" id="secondPointY" value="50" placeholder="Y" />
+                            </div>
+                            <div class="mb-3">
+                                <label>Point 3:</label>
+                                <input class="input is-small" style="width: 30%" type="number" id="thirdPointX" value="350" placeholder="X" />
+                                <input class="input is-small" style="width: 30%" type="number" id="thirdPointY" value="50" placeholder="Y" />
+                            </div>
+                            <div class="mb-3">
+                                <label>Point 4:</label>
+                                <input class="input is-small" style="width: 30%" type="number" id="FourthPointX" value="250" placeholder="X" />
+                                <input class="input is-small" style="width: 30%" type="number" id="FourthPointY" value="150" placeholder="Y" />
+                            </div>
+                            <div class="mb-3">
+                                <label>Point 5:</label>
+                                <input class="input is-small" style="width: 30%" type="number" id="FifthPointX" value="150" placeholder="X" />
+                                <input class="input is-small" style="width: 30%" type="number" id="FifthPointY" value="400" placeholder="Y" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="v-button is-small is-primary is-responsive" style="margin: 0.5rem" id="submit">
+                        Submit
+                    </button>
+                </div>
+                <div class="v-datalist-row" id="top-border">
+                    <div class="v-datalist-title is-size-8-mobile">
+                        Iteration Controls
+                    </div>
+                    <div class="columns is-centered is-flex-wrap-wrap button-div" style="margin: auto; width: auto">
+                        <button style="margin: 1%" class="v-button next-btn is-responsive" id="next_button">
+                            Next
+                        </button>
+                        <button style="margin: 1%" class="v-button previous-btn is-responsive" id="prev_button">
+                            Prev
+                        </button>
+                        <button style="margin: 1%" class="v-button reset-btn is-responsive" id="reset_button" onclick="location.reload()">
+                            Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Center Column - Canvas -->
+        <div id="canvas-wrap" class="column is-8-desktop is-11-tablet is-12-mobile exp">
+            <canvas class="v-canvas-container" id="canvas" style="border: 2px solid black">
+            </canvas>
+            <div id="points"></div>
+        </div>
+
+        <!-- Right Column - Observations -->
+        <div class="column is-2-desktop is-6-tablet is-10-mobile right">
+            <div class="v-datalist-container components-list">
+                <div class="v-datalist-title">Observations</div>
+                <div class="v-datalist-row">
+                    <div id="observation-step-message" style="margin-bottom: 8px; color: #333; font-weight: bold;"></div>
+                    <!-- Add missing status/logic/point/line text elements -->
+                    <div id="text"></div>
+                    <div id="logic_text"></div>
+                    <div id="pointstat_text"></div>
+                    <div id="linestat_text"></div>
+                    <div id="intermediate-vertices" class="v-datalist-row" style="margin-top: 15px;">
+                        <strong style="float: center;">Intermediate Vertices:</strong>
+                        <div class="v-table-wrap">
+                            <table id="observations-table" class="table is-bordered is-fullwidth">
+                                <thead id="table-head">
+                                    <tr>
+                                        <th>Vertex</th>
+                                        <th>Coordinates</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="result"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.8-b/js/script.js"></script>
+<script src="../assets/js/iframeResize.js"></script>
+        
+        </body>
+
+</html>
