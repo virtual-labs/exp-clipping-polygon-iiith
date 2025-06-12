@@ -98,6 +98,10 @@ let noOfLinesClipped = 0;
 let intermediateVertices = [];
 let currentIntermediateVertices = [];
 
+// Add at the top with other global variables
+let stepHistory = [];
+let currentStep = -1;
+
 // Function to display intermediate vertices
 function displayIntermediateVertices(vertices, color = "yellow") {
   // Clear previous vertices display
@@ -221,6 +225,7 @@ function drawLine(x1, y1, x2, y2, width, color) {
   ctx.stroke();
 }
 function chooseLine() {
+  console.log("chooseLine function called");
   if (noOfLinesClipped == 0) {
     lineStatText.innerHTML = "Clipping line 1";
   } else if (noOfLinesClipped == 1) {
@@ -261,7 +266,7 @@ function point(colour1, colour2, colour3) {
   }
 }
 function grid() {
-  document.getElementById("text").style.font = "20px serif";
+  /* document.getElementById("text").style.font = "20px serif"; */
   point("blue", "red", "red");
   coordinatesText(topLeftRectX, topLeftRectY);
   coordinatesText(bottomRightRectX, bottomRightRectY);
@@ -288,69 +293,98 @@ function main() {
   }
 }
 
-function check() {
-  if (isClipped == 1) {
-    text.innerHTML = "<br> <br> Polygon is Clipped";
-    logicText.innerHTML = "";
-    pointStatText.innerHTML = "";
-    lineStatText.innerHTML = "";
-    var outputDiv = document.getElementById("output");
-    outputDiv.style.display = "block"; // Show the div
-    startClipping();
-    drawLine(
-      topLeftRectX,
-      topLeftRectY,
-      topLeftRectX,
-      bottomRightRectY,
-      2,
-      "#fb0483"
-    );
-    drawLine(
-      bottomRightRectX,
-      topLeftRectY,
-      bottomRightRectX,
-      bottomRightRectY,
-      2,
-      "#fb0483"
-    );
-    drawLine(
-      topLeftRectX,
-      topLeftRectY,
-      bottomRightRectX,
-      topLeftRectY,
-      2,
-      "#fb0483"
-    );
-    drawLine(
-      topLeftRectX,
-      bottomRightRectY,
-      bottomRightRectX,
-      bottomRightRectY,
-      2,
-      "#fb0483"
-    );
-    drawLine(
-      topLeftRectX,
-      topLeftRectY,
-      bottomRightRectX,
-      bottomRightRectY,
-      2,
-      "#fb0483"
-    );
+// Add this function to track steps
+function saveStep() {
+  const step = {
+    currentLine: currentLine,
+    status: status,
+    isDark: isDark,
+    firstPointStatus: firstPointStatus,
+    currentPoint: currentPoint,
+    intersection_x: intersection_x,
+    intersection_y: intersection_y,
+    PointsX: [...PointsX],
+    PointsY: [...PointsY],
+    dupPointsX: [...dupPointsX],
+    dupPointsY: [...dupPointsY],
+    noOfIterations: noOfIterations,
+    transitionIteration: transitionIteration
+  };
+  
+  // If we're going back and then making a new step, remove future steps
+  if (currentStep < stepHistory.length - 1) {
+    stepHistory = stepHistory.slice(0, currentStep + 1);
   }
+  
+  stepHistory.push(step);
+  currentStep = stepHistory.length - 1;
+  console.log("Step saved:", currentStep, "Total steps:", stepHistory.length);
+}
+
+// Update the check function to save steps
+function check() {
+  console.log("check function called with status:", status);
+  console.log("currentLine:", currentLine, "firstPointStatus:", firstPointStatus);
+  console.log("isDark:", isDark, "isClipped:", isClipped);
+
+  if (isClipped == 1) {
+    console.log("Final state - clipping complete");
+    // Final state after all clipping is done
+    currentIntermediateVertices = clipAgainstTop(currentIntermediateVertices, bottomRightRectY);
+    
+    // Update all text elements with completion message
+    const completionMessage = "Clipping process finished";
+    renderObservations(completionMessage);
+    text.innerHTML = "Polygon Clipping Complete";
+    logicText.innerHTML = "All edges have been clipped";
+    pointStatText.innerHTML = "Final vertices shown in table";
+    lineStatText.innerHTML = "Clipping process finished";
+
+    // Disable the next button
+    const nextButton = document.getElementById("next-button");
+    if (nextButton) {
+      nextButton.disabled = true;
+      nextButton.style.opacity = "0.5";
+      nextButton.style.cursor = "not-allowed";
+      nextButton.style.pointerEvents = "none";
+      nextButton.title = "Clipping process is complete";
+    }
+
+    // Draw the final line
+    drawLine(
+      PointsX[currentLine],
+      PointsY[currentLine],
+      PointsX[(currentLine + 1) % noofLines],
+      PointsY[(currentLine + 1) % noofLines],
+      2,
+      "#fb0483"
+    );
+    return;
+  } else if (status == 0) {
+    console.log("Status 0 - Initial state");
+    // Initialize vertices for left edge clipping
+    currentIntermediateVertices = [];
+    for (let i = 0; i < noofLines; i++) {
+      currentIntermediateVertices.push({ x: Number(PointsX[i]), y: Number(PointsY[i]) });
+    }
+    renderObservations("Starting polygon clipping.");
+    text.innerHTML = "Left edge is selected for clipping";
+    logicText.innerHTML = "Checking if point is inside left boundary";
+    pointStatText.innerHTML = firstPointStatus === 0 ? "First Point is Selected" : "Second Point is Selected";
+    lineStatText.innerHTML = "Line " + (currentLine + 1) + " selected";
+
   if (noOfIterations == 1) {
     statusPrev[currentLine] = status;
   }
-  if (
-    (currentPoint == 0 && firstPointStatus == 1) ||
+
+    if ((currentPoint == 0 && firstPointStatus == 1) ||
     findintersection(
       PointsX[currentLine],
       PointsX[(currentLine + 1) % noofLines],
       PointsY[currentLine],
       PointsY[(currentLine + 1) % noofLines],
       "#606060"
-    ) == 0
-  ) {
+        ) == 0) {
     noOfLinesClipped++;
     if (noOfLinesClipped == noofLines) {
       isClipped = 1;
@@ -358,39 +392,15 @@ function check() {
     }
     moveToNextLine();
   }
+
   if (currentPoint == 0 && firstPointStatus == 0) {
     currentPoint = secondPoint;
     firstPointStatus = 1;
     transitionIteration = noOfIterations;
   }
-  if (status == 0) {
-    let eqornq = "==";
-    if ((leftSide & currentPoint) != 0) {
-      eqornq = "!=";
-    }
-    text.innerHTML =
-      "<br> <br> Left edge is selected for clipping the line aganist the left point";
-    logicText.innerHTML =
-      "0" +
-      "0" +
-      "0" +
-      "1" +
-      " " +
-      "&" +
-      " " +
-      convertToBinary(currentPoint) +
-      " " +
-      eqornq +
-      " " +
-      "0";
-    // if (firstPointStatus == 0) {
-    //     pointStatText.innerHTML = "First Point is Selected";
-    // }
-    // else {
-    //     pointStatText.innerHTML = "Second Point is Selected";
-    // }
-    chooseLine();
+
     if (isDark == 0) {
+      console.log("Drawing left edge in blue");
       drawLine(
         topLeftRectX,
         topLeftRectY,
@@ -417,35 +427,20 @@ function check() {
         2,
         "yellow"
       );
-      status = 2;
+      status = 1; // Changed from 2 to 1 to maintain correct sequence
       isDark = 0;
     }
   } else if (status == 1) {
-    let eqornq = "==";
-    if ((rightSide & currentPoint) != 0) {
-      eqornq = "!=";
-    }
-    text.innerHTML = "<br> <br> Right edge is selected for clipping";
-    logicText.innerHTML =
-      "0" +
-      "0" +
-      "1" +
-      "0" +
-      " " +
-      "&" +
-      " " +
-      convertToBinary(currentPoint) +
-      " " +
-      eqornq +
-      " " +
-      "0";
-    // if (firstPointStatus == 0) {
-    //     pointStatText.innerHTML = "First Point is Selected";
-    // } else {
-    //     pointStatText.innerHTML = "Second Point is Selected";
-    // }
-    chooseLine();
+    console.log("Status 1 - Right edge clipping");
+    currentIntermediateVertices = clipAgainstRight(currentIntermediateVertices, Number(bottomRightRectX));
+    renderObservations("Clipping against right edge (x = " + bottomRightRectX + ")");
+    text.innerHTML = "Right edge is selected for clipping";
+    logicText.innerHTML = "Checking if point is inside right boundary";
+    pointStatText.innerHTML = firstPointStatus === 0 ? "First Point is Selected" : "Second Point is Selected";
+    lineStatText.innerHTML = "Clipping line " + (currentLine + 1);
+
     if (isDark == 0) {
+      console.log("Drawing right edge in blue");
       drawLine(
         bottomRightRectX,
         topLeftRectY,
@@ -470,35 +465,20 @@ function check() {
         2,
         "yellow"
       );
-      status = 3;
+      status = 2; // Changed from 3 to 2 to maintain correct sequence
       isDark = 0;
     }
   } else if (status == 2) {
-    let eqornq = "==";
-    if ((bottomSide & currentPoint) != 0) {
-      eqornq = "!=";
-    }
-    text.innerHTML = "<br> <br> Bottom edge is selected for clipping";
-    logicText.innerHTML =
-      "0" +
-      "1" +
-      "0" +
-      "0" +
-      " " +
-      "&" +
-      " " +
-      convertToBinary(currentPoint) +
-      " " +
-      eqornq +
-      " " +
-      "0";
-    // if (firstPointStatus == 0) {
-    //     pointStatText.innerHTML = "First Point is Selected";
-    // } else {
-    //     pointStatText.innerHTML = "Second Point is Selected";
-    // }
-    chooseLine();
+    console.log("Status 2 - Bottom edge clipping");
+    currentIntermediateVertices = clipAgainstBottom(currentIntermediateVertices, Number(topLeftRectY));
+    renderObservations("Clipping against bottom edge (y = " + topLeftRectY + ")");
+    text.innerHTML = "Bottom edge is selected for clipping";
+    logicText.innerHTML = "Checking if point is inside bottom boundary";
+    pointStatText.innerHTML = firstPointStatus === 0 ? "First Point is Selected" : "Second Point is Selected";
+    lineStatText.innerHTML = "Clipping line " + (currentLine + 1);
+
     if (isDark == 0) {
+      console.log("Drawing bottom edge in blue");
       drawLine(
         topLeftRectX,
         bottomRightRectY,
@@ -523,35 +503,20 @@ function check() {
         2,
         "yellow"
       );
-      status = 1;
+      status = 3; // Changed from 1 to 3 to maintain correct sequence
       isDark = 0;
     }
   } else if (status == 3) {
-    let eqornq = "==";
-    if ((topSide & currentPoint) != 0) {
-      eqornq = "!=";
-    }
-    text.innerHTML = "<br> <br> Top edge is selected for clipping";
-    logicText.innerHTML =
-      "1" +
-      "0" +
-      "0" +
-      "0" +
-      " " +
-      "&" +
-      " " +
-      convertToBinary(currentPoint) +
-      " " +
-      eqornq +
-      " " +
-      "0";
-    // if (firstPointStatus == 0) {
-    //     pointStatText.innerHTML = "First Point is Selected";
-    // } else {
-    //     pointStatText.innerHTML = "Second Point is Selected";
-    // }
-    chooseLine();
+    console.log("Status 3 - Top edge clipping");
+    currentIntermediateVertices = clipAgainstTop(currentIntermediateVertices, Number(bottomRightRectY));
+    renderObservations("Clipping against top edge (y = " + bottomRightRectY + ")");
+    text.innerHTML = "Top edge is selected for clipping";
+    logicText.innerHTML = "Checking if point is inside top boundary";
+    pointStatText.innerHTML = firstPointStatus === 0 ? "First Point is Selected" : "Second Point is Selected";
+    lineStatText.innerHTML = "Clipping line " + (currentLine + 1);
+
     if (isDark == 0) {
+      console.log("Drawing top edge in blue");
       drawLine(
         topLeftRectX,
         topLeftRectY,
@@ -576,10 +541,16 @@ function check() {
         2,
         "yellow"
       );
-      status = 0;
+      status = 0; // Reset to 0 for next line
       isDark = 0;
     }
   }
+
+  noOfIterations++;
+  console.log("End of check function - noOfIterations:", noOfIterations);
+  
+  // Save the current step before making changes
+  saveStep();
 }
 function findintersection(x1, x2, y1, y2, colour) {
   if (
@@ -768,371 +739,27 @@ function intersection() {
 main();
 
 nextButton.addEventListener("click", () => {
-  noOfIterations++;
+  console.log("Next button clicked");
   check();
 });
-previousButton.addEventListener("click", () => {
-  logicText.innerHTML = "";
-  pointStatText.innerHTML = "";
-  lineStatText.innerHTML = "";
 
-  if ((noOfLinesClipped == 0 && noOfIterations == 0) || isClipped == 1) {
-    return;
-  }
-  if (previousLine == currentLine - 1 && noOfIterations == 0) {
-    noOfLinesClipped--;
-    previousLineChange();
-    return;
-  }
-  if (noOfIterations == transitionIteration) {
-    firstPointStatus = 0;
-    currentPoint = 0;
-  }
-  if (isDark == 1) {
-    if (status == 0) {
-      drawLine(
-        topLeftRectX,
-        topLeftRectY,
-        topLeftRectX,
-        bottomRightRectY,
-        2,
-        "yellow"
-      );
-      isDark = 0;
-    } else if (status == 1) {
-      drawLine(
-        bottomRightRectX,
-        bottomRightRectY,
-        bottomRightRectX,
-        topLeftRectY,
-        2,
-        "yellow"
-      );
-      isDark = 0;
-    } else if (status == 2) {
-      drawLine(
-        topLeftRectX,
-        bottomRightRectY,
-        bottomRightRectX,
-        bottomRightRectY,
-        2,
-        "yellow"
-      );
-      isDark = 0;
-    } else if (status == 3) {
-      drawLine(
-        topLeftRectX,
-        topLeftRectY,
-        bottomRightRectX,
-        topLeftRectY,
-        2,
-        "yellow"
-      );
-      isDark = 0;
-    }
-  } else {
-    if (status == 0) {
-      text.innerHTML = "<br> <br> Unclip the previously clipped line by top edge.";
-      status = 3;
-    } else {
-      if (status == 3) {
-        text.innerHTML = "<br> <br> Unclip the previously clipped line by right edge.";
-        status = 1;
-      } else if (status == 2) {
-        status = 0;
-        text.innerHTML = "<br> <br> Unclip the previously clipped line by left edge.";
-      } else if (status == 1) {
-        status = 2;
-        text.innerHTML = "<br> <br> Unclip the previously clipped line by bottom edge.";
-      }
-    }
-    if (status == 0) {
-      if (
-        (firstPointStatus == 0) & ((firstPoint & leftSide) != 0) ||
-        (firstPointStatus == 1) & ((secondPoint & leftSide) != 0)
-      ) {
-        point("#606060", "#606060", "#606060");
-        ctx.beginPath();
-        if (firstPointStatus == 0) {
-          ctx.moveTo(dupPointsX[currentLine], dupPointsY[currentLine]);
-          PointsX[currentLine] = dupPointsX[currentLine];
-          PointsY[currentLine] = dupPointsY[currentLine];
-          if (
-            dupPointsX[currentLine] == PointsX[currentLine] &&
-            dupPointsY[currentLine] == PointsY[currentLine] &&
-            (PointsX[currentLine] != initialPointsX[currentLine]) &
-              (PointsY[currentLine] != initialPointsY[currentLine])
-          ) {
-            dupPointsX[currentLine] = initialPointsX[currentLine];
-            dupPointsY[currentLine] = initialPointsY[currentLine];
-          }
-        } else {
-          ctx.moveTo(
-            dupPointsX[(currentLine + 1) % noofLines],
-            dupPointsY[(currentLine + 1) % noofLines]
-          );
-          PointsX[(currentLine + 1) % noofLines] =
-            dupPointsX[(currentLine + 1) % noofLines];
-          PointsY[(currentLine + 1) % noofLines] =
-            dupPointsY[(currentLine + 1) % noofLines];
-          if (
-            dupPointsX[(currentLine + 1) % noofLines] ==
-              PointsX[(currentLine + 1) % noofLines] &&
-            dupPointsY[(currentLine + 1) % noofLines] ==
-              PointsY[(currentLine + 1) % noofLines] &&
-            (PointsX[(currentLine + 1) % noofLines] !=
-              initialPointsX[(currentLine + 1) % noofLines]) &
-              (PointsY[(currentLine + 1) % noofLines] !=
-                initialPointsY[(currentLine + 1) % noofLines])
-          ) {
-            dupPointsX[(currentLine + 1) % noofLines] =
-              initialPointsX[(currentLine + 1) % noofLines];
-            dupPointsY[(currentLine + 1) % noofLines] =
-              initialPointsY[(currentLine + 1) % noofLines];
-          }
-        }
-        ctx.lineTo(intersection_x, intersection_y);
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = "white";
-        ctx.stroke();
-        drawLine(
-          topLeftRectX,
-          topLeftRectY,
-          topLeftRectX,
-          bottomRightRectY,
-          2,
-          "blue"
-        );
-        isDark = 1;
-        currentPoint = currentPoint + 1;
-        point("blue", "red", "red");
-      } else {
-        drawLine(
-          topLeftRectX,
-          topLeftRectY,
-          topLeftRectX,
-          bottomRightRectY,
-          2,
-          "blue"
-        );
-        isDark = 1;
-      }
-    } else if (status == 1) {
-      if (
-        (firstPointStatus == 0) & ((firstPoint & rightSide) != 0) ||
-        (firstPointStatus == 1) & ((secondPoint & rightSide) != 0)
-      ) {
-        point("#606060", "#606060", "#606060");
-        ctx.beginPath();
-        if (firstPointStatus == 0) {
-          ctx.moveTo(dupPointsX[currentLine], dupPointsY[currentLine]);
-          PointsX[currentLine] = dupPointsX[currentLine];
-          PointsY[currentLine] = dupPointsY[currentLine];
-          if (
-            dupPointsX[currentLine] == PointsX[currentLine] &&
-            dupPointsY[currentLine] == PointsY[currentLine] &&
-            PointsX[currentLine] != initialPointsX[currentLine] &&
-            PointsY[currentLine] != initialPointsY[currentLine]
-          ) {
-            dupPointsX[currentLine] = initialPointsX[currentLine];
-            dupPointsY[currentLine] = initialPointsY[currentLine];
-          }
-        } else {
-          ctx.moveTo(
-            dupPointsX[(currentLine + 1) % noofLines],
-            dupPointsY[(currentLine + 1) % noofLines]
-          );
-          PointsX[(currentLine + 1) % noofLines] =
-            dupPointsX[(currentLine + 1) % noofLines];
-          PointsY[(currentLine + 1) % noofLines] =
-            dupPointsY[(currentLine + 1) % noofLines];
-          if (
-            dupPointsX[(currentLine + 1) % noofLines] ==
-              PointsX[(currentLine + 1) % noofLines] &&
-            dupPointsY[(currentLine + 1) % noofLines] ==
-              PointsY[(currentLine + 1) % noofLines] &&
-            PointsX[(currentLine + 1) % noofLines] !=
-              initialPointsX[(currentLine + 1) % noofLines] &&
-            PointsY[(currentLine + 1) % noofLines] !=
-              initialPointsY[(currentLine + 1) % noofLines]
-          ) {
-            dupPointsX[(currentLine + 1) % noofLines] =
-              initialPointsX[(currentLine + 1) % noofLines];
-            dupPointsY[(currentLine + 1) % noofLines] =
-              initialPointsY[(currentLine + 1) % noofLines];
-          }
-        }
-        ctx.lineTo(intersection_x, intersection_y);
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = "white";
-        ctx.stroke();
-        drawLine(
-          bottomRightRectX,
-          topLeftRectY,
-          bottomRightRectX,
-          bottomRightRectY,
-          2,
-          "blue"
-        );
-        isDark = 1;
-        currentPoint = currentPoint + 2;
-        point("blue", "red", "red");
-      } else {
-        drawLine(
-          bottomRightRectX,
-          topLeftRectY,
-          bottomRightRectX,
-          bottomRightRectY,
-          2,
-          "blue"
-        );
-        isDark = 1;
-      }
-    } else if (status == 2) {
-      if (
-        (firstPointStatus == 0) & ((firstPoint & bottomSide) != 0) ||
-        (firstPointStatus == 1) & ((secondPoint & bottomSide) != 0)
-      ) {
-        point("#606060", "#606060", "#606060");
-        ctx.beginPath();
-        if (firstPointStatus == 0) {
-          ctx.moveTo(dupPointsX[currentLine], dupPointsY[currentLine]);
-          PointsX[currentLine] = dupPointsX[currentLine];
-          PointsY[currentLine] = dupPointsY[currentLine];
-          if (
-            dupPointsX[currentLine] == PointsX[currentLine] &&
-            dupPointsY[currentLine] == PointsY[currentLine] &&
-            PointsX[currentLine] != initialPointsX[currentLine] &&
-            PointsY[currentLine] != initialPointsY[currentLine]
-          ) {
-            dupPointsX[currentLine] = initialPointsX[currentLine];
-            dupPointsY[currentLine] = initialPointsY[currentLine];
-          }
-        } else {
-          ctx.moveTo(
-            dupPointsX[(currentLine + 1) % noofLines],
-            dupPointsY[(currentLine + 1) % noofLines]
-          );
-          PointsX[(currentLine + 1) % noofLines] =
-            dupPointsX[(currentLine + 1) % noofLines];
-          PointsY[(currentLine + 1) % noofLines] =
-            dupPointsY[(currentLine + 1) % noofLines];
-          if (
-            dupPointsX[(currentLine + 1) % noofLines] ==
-              PointsX[(currentLine + 1) % noofLines] &&
-            dupPointsY[(currentLine + 1) % noofLines] ==
-              PointsY[(currentLine + 1) % noofLines] &&
-            PointsX[(currentLine + 1) % noofLines] !=
-              initialPointsX[(currentLine + 1) % noofLines] &&
-            PointsY[(currentLine + 1) % noofLines] !=
-              initialPointsY[(currentLine + 1) % noofLines]
-          ) {
-            dupPointsX[(currentLine + 1) % noofLines] =
-              initialPointsX[(currentLine + 1) % noofLines];
-            dupPointsY[(currentLine + 1) % noofLines] =
-              initialPointsY[(currentLine + 1) % noofLines];
-          }
-        }
-        ctx.lineTo(intersection_x, intersection_y);
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = "white";
-        ctx.stroke();
-        drawLine(
-          topLeftRectX,
-          bottomRightRectY,
-          bottomRightRectX,
-          bottomRightRectY,
-          2,
-          "blue"
-        );
-        isDark = 1;
-        currentPoint = currentPoint + 4;
-        point("blue", "red", "red");
-      } else {
-        drawLine(
-          topLeftRectX,
-          bottomRightRectY,
-          bottomRightRectX,
-          bottomRightRectY,
-          2,
-          "blue"
-        );
-        isDark = 1;
-      }
-    } else if (status == 3) {
-      if (
-        (firstPointStatus == 0) & ((firstPoint & topSide) != 0) ||
-        (firstPointStatus == 1) & ((secondPoint & topSide) != 0)
-      ) {
-        point("#606060", "#606060", "#606060");
-        ctx.beginPath();
-        if (firstPointStatus == 0) {
-          ctx.moveTo(dupPointsX[currentLine], dupPointsY[currentLine]);
-          PointsX[currentLine] = dupPointsX[currentLine];
-          PointsY[currentLine] = dupPointsY[currentLine];
-          if (
-            dupPointsX[currentLine] == PointsX[currentLine] &&
-            dupPointsY[currentLine] == PointsY[currentLine] &&
-            PointsX[currentLine] != initialPointsX[currentLine] &&
-            PointsY[currentLine] != initialPointsY[currentLine]
-          ) {
-            dupPointsX[currentLine] = initialPointsX[currentLine];
-            dupPointsY[currentLine] = initialPointsY[currentLine];
-          }
-        } else {
-          ctx.moveTo(
-            dupPointsX[(currentLine + 1) % noofLines],
-            dupPointsY[(currentLine + 1) % noofLines]
-          );
-          PointsX[(currentLine + 1) % noofLines] =
-            dupPointsX[(currentLine + 1) % noofLines];
-          PointsY[(currentLine + 1) % noofLines] =
-            dupPointsY[(currentLine + 1) % noofLines];
-          if (
-            dupPointsX[(currentLine + 1) % noofLines] ==
-              PointsX[(currentLine + 1) % noofLines] &&
-            dupPointsY[(currentLine + 1) % noofLines] ==
-              PointsY[(currentLine + 1) % noofLines] &&
-            PointsX[(currentLine + 1) % noofLines] !=
-              initialPointsX[(currentLine + 1) % noofLines] &&
-            PointsY[(currentLine + 1) % noofLines] !=
-              initialPointsY[(currentLine + 1) % noofLines]
-          ) {
-            dupPointsX[(currentLine + 1) % noofLines] =
-              initialPointsX[(currentLine + 1) % noofLines];
-            dupPointsY[(currentLine + 1) % noofLines] =
-              initialPointsY[(currentLine + 1) % noofLines];
-          }
-        }
-        ctx.lineTo(intersection_x, intersection_y);
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = "white";
-        ctx.stroke();
-        drawLine(
-          topLeftRectX,
-          topLeftRectY,
-          bottomRightRectX,
-          topLeftRectY,
-          2,
-          "blue"
-        );
-        isDark = 1;
-        currentPoint = currentPoint + 8;
-        point("blue", "red", "red");
-      } else {
-        drawLine(
-          topLeftRectX,
-          topLeftRectY,
-          bottomRightRectX,
-          topLeftRectY,
-          2,
-          "blue"
-        );
-      }
-    }
-  }
-  noOfIterations--;
+previousButton.addEventListener("click", () => {
+  console.log("Previous button clicked");
+  prev();
 });
+
+resetButton.addEventListener("click", () => {
+  console.log("Reset button clicked");
+  main();
+});
+
+// Comment out mobile button listeners
+// document.getElementById("next_button_mobile").addEventListener("click", check);
+// document.getElementById("prev_button_mobile").addEventListener("click", previousLineChange);
+// document.getElementById("reset_button_mobile").addEventListener("click", () => location.reload());
+
+// Comment out the line that sets innerHTML for the non-existent 'text' element
+// text.innerHTML = "<br> <br> Left edge is selected for clipping the line aganist the left point";
 
 function computeNewPointsBinary(PointsX, PointsY, x, y) {
   firstPoint = 0;
@@ -1273,86 +900,172 @@ function resize(canvas) {
     canvas.height = displayHeight;
   }
 }
-function previousLineChange() {
-  if (isDark == 1) {
-    if (status == 0) {
+function redraw() {
+  console.log("Redrawing state for line:", currentLine, "with status:", status);
+  
+  // Draw the axes first
+  drawLine(0, canvas.height / 2, canvas.width, canvas.height / 2, 1, "black");
+  drawLine(canvas.width / 2, 0, canvas.width / 2, canvas.height, 1, "black");
+  
+  // Draw the clipping window
+  drawLine(topLeftRectX, topLeftRectY, bottomRightRectX, topLeftRectY, 2, "black");
+  drawLine(bottomRightRectX, topLeftRectY, bottomRightRectX, bottomRightRectY, 2, "black");
+  drawLine(bottomRightRectX, bottomRightRectY, topLeftRectX, bottomRightRectY, 2, "black");
+  drawLine(topLeftRectX, bottomRightRectY, topLeftRectX, topLeftRectY, 2, "black");
+  
+  // Draw all polygon lines
+  for (let i = 0; i < noofLines; i++) {
+    if (i === currentLine) {
+      // Draw current line in pink
       drawLine(
-        topLeftRectX,
-        topLeftRectY,
-        topLeftRectX,
-        bottomRightRectY,
+        PointsX[i],
+        PointsY[i],
+        PointsX[(i + 1) % noofLines],
+        PointsY[(i + 1) % noofLines],
         2,
-        "yellow"
+        "#fb0483"
       );
-      isDark = 0;
-    } else if (status == 1) {
+    } else {
+      // Draw other lines in their original color
       drawLine(
-        bottomRightRectX,
-        bottomRightRectY,
-        bottomRightRectX,
-        topLeftRectY,
+        PointsX[i],
+        PointsY[i],
+        PointsX[(i + 1) % noofLines],
+        PointsY[(i + 1) % noofLines],
         2,
-        "yellow"
+        "black"
       );
-      isDark = 0;
-    } else if (status == 2) {
-      drawLine(
-        topLeftRectX,
-        bottomRightRectY,
-        bottomRightRectX,
-        bottomRightRectY,
-        2,
-        "yellow"
-      );
-      isDark = 0;
-    } else if (status == 3) {
-      drawLine(
-        topLeftRectX,
-        topLeftRectY,
-        bottomRightRectX,
-        topLeftRectY,
-        2,
-        "yellow"
-      );
-      isDark = 0;
     }
   }
-  findintersection(
-    initialPointsX[currentLine],
-    initialPointsX[(currentLine + 1) % noofLines],
-    initialPointsY[currentLine],
-    initialPointsY[(currentLine + 1) % noofLines],
-    "white"
-  );
-  firstPointStatus = 1;
-  if (currentLine == 0) {
-    currentLine = noofLines - 1;
-    previousLine = noofLines - 1;
-  } else {
-    currentLine = currentLine - 1;
-    previousLine = previousLine - 1;
+  
+  // Draw the current edge being clipped
+  if (status === 0) {
+      drawLine(
+        topLeftRectX,
+        topLeftRectY,
+        topLeftRectX,
+        bottomRightRectY,
+        2,
+      isDark ? "yellow" : "blue"
+      );
+  } else if (status === 1) {
+      drawLine(
+        bottomRightRectX,
+        topLeftRectY,
+      bottomRightRectX,
+      bottomRightRectY,
+        2,
+      isDark ? "yellow" : "blue"
+      );
+  } else if (status === 2) {
+      drawLine(
+        topLeftRectX,
+        bottomRightRectY,
+        bottomRightRectX,
+        bottomRightRectY,
+        2,
+      isDark ? "yellow" : "blue"
+      );
+  } else if (status === 3) {
+      drawLine(
+        topLeftRectX,
+        topLeftRectY,
+        bottomRightRectX,
+        topLeftRectY,
+        2,
+      isDark ? "yellow" : "blue"
+    );
   }
+  
+  // Draw intersection points if they exist
+  if (intersection_x !== undefined && intersection_y !== undefined) {
+    point("#606060", "#606060", "#606060");
+  }
+}
+function prev() {
+  console.log("Prev button clicked");
+  console.log("Current step:", currentStep, "Total steps:", stepHistory.length);
+  
+  if (currentStep <= 0) {
+    console.log("Already at the first step, can't go back");
+    // Disable prev button
+    const prevButton = document.getElementById("prev-button");
+    if (prevButton) {
+      prevButton.disabled = true;
+      prevButton.style.opacity = "0.5";
+      prevButton.style.cursor = "not-allowed";
+      prevButton.style.pointerEvents = "none";
+      prevButton.title = "Already at the first step";
+    }
+    // Update observation message
+    renderObservations("Already at the first step - Starting polygon clipping.");
+    return;
+  }
+  
+  // Enable prev button if it was disabled
+  const prevButton = document.getElementById("prev-button");
+  if (prevButton) {
+    prevButton.disabled = false;
+    prevButton.style.opacity = "1";
+    prevButton.style.cursor = "pointer";
+    prevButton.style.pointerEvents = "auto";
+    prevButton.title = "Go to previous step";
+  }
+  
+  // Go back one step
+  currentStep--;
+  const step = stepHistory[currentStep];
+  
+  // Restore the state from the step
+  currentLine = step.currentLine;
+  status = step.status;
+  isDark = step.isDark;
+  firstPointStatus = step.firstPointStatus;
+  currentPoint = step.currentPoint;
+  intersection_x = step.intersection_x;
+  intersection_y = step.intersection_y;
+  
+  // Restore points by updating array elements
   for (let i = 0; i < noofLines; i++) {
-    PointsX[i] = prevPointsX[i][currentLine];
-    PointsY[i] = prevPointsY[i][currentLine];
-    dupPointsX[i] = prevdupPointsX[i][currentLine];
-    dupPointsY[i] = prevdupPointsY[i][currentLine];
+    PointsX[i] = step.PointsX[i];
+    PointsY[i] = step.PointsY[i];
+    dupPointsX[i] = step.dupPointsX[i];
+    dupPointsY[i] = step.dupPointsY[i];
   }
-  noOfIterations = previousnoOfIterations[currentLine];
-  transitionIteration = previoustransitionIteration[currentLine];
-  currentPoint = 0;
-  computeNewPointsBinary(
-    initialPointsX,
-    initialPointsY,
-    currentLine,
-    (currentLine + 1) % noofLines
-  );
-  isDark = 0;
-  currentPoint = 0;
-  intersection_x = previousIntersection_x[currentLine];
-  intersection_y = previousIntersection_y[currentLine];
+  
+  // Restore iteration counts
+  noOfIterations = step.noOfIterations;
+  transitionIteration = step.transitionIteration;
+  
+  // Update the observations with consistent messages
+  if (status === 0) {
+    renderObservations("Starting polygon clipping.");
+    text.innerHTML = "Left edge is selected for clipping";
+    logicText.innerHTML = "Checking if point is inside left boundary";
+  } else if (status === 1) {
+    renderObservations("Clipping against right edge (x = " + bottomRightRectX + ")");
+    text.innerHTML = "Right edge is selected for clipping";
+    logicText.innerHTML = "Checking if point is inside right boundary";
+  } else if (status === 2) {
+    renderObservations("Clipping against bottom edge (y = " + topLeftRectY + ")");
+    text.innerHTML = "Bottom edge is selected for clipping";
+    logicText.innerHTML = "Checking if point is inside bottom boundary";
+  } else if (status === 3) {
+    renderObservations("Clipping against top edge (y = " + bottomRightRectY + ")");
+    text.innerHTML = "Top edge is selected for clipping";
+    logicText.innerHTML = "Checking if point is inside top boundary";
+  }
+  
+  // Update point and line status
+  pointStatText.innerHTML = firstPointStatus === 0 ? "First Point is Selected" : "Second Point is Selected";
+  lineStatText.innerHTML = "Line " + (currentLine + 1) + " selected";
+  
+  console.log("State restored to step:", currentStep);
 }
 function moveToNextLine() {
+  console.log("Moving to next line. Current line:", currentLine);
+  
+  // Save current state before moving to next line
   previousIntersection_x[currentLine] = intersection_x;
   previousIntersection_y[currentLine] = intersection_y;
   for (let i = 0; i < noofLines; i++) {
@@ -1363,28 +1076,43 @@ function moveToNextLine() {
   }
   previousnoOfIterations[currentLine] = noOfIterations - 1;
   previoustransitionIteration[currentLine] = transitionIteration;
+  
+  // Reset points to initial state
   for (let i = 0; i < noofLines; i++) {
     PointsX[i] = initialPointsX[i];
     PointsY[i] = initialPointsY[i];
     dupPointsX[i] = PointsX[i];
     dupPointsY[i] = PointsY[i];
   }
+  
   previousLine = currentLine;
   currentLine = (currentLine + 1) % noofLines;
   firstPointStatus = 0;
   noOfIterations = 0;
   transitionIteration = 0;
   isDark = 0;
+  
+  // Compute new points for the current line
   computeNewPointsBinary(
     PointsX,
     PointsY,
     currentLine,
     (currentLine + 1) % noofLines
   );
+  
   if (firstPointStatus == 0) {
     currentPoint = firstPoint;
   } else {
     currentPoint = secondPoint;
+  }
+
+  // Check if we've completed all lines
+  if (noOfLinesClipped >= noofLines) {
+    console.log("All lines clipped, marking as complete");
+    isClipped = 1;
+    // Trigger the completion state
+    check();
+    return; // Exit after triggering completion
   }
 }
 
@@ -1552,8 +1280,56 @@ function displayClippedVertices(vertices) {
 }
 
 // Add event listeners for mobile buttons
-document.getElementById("next_button_mobile").addEventListener("click", check);
-document.getElementById("prev_button_mobile").addEventListener("click", previousLineChange);
-document.getElementById("reset_button_mobile").addEventListener("click", () => location.reload());
+// document.getElementById("next_button_mobile").addEventListener("click", check);
+// document.getElementById("prev_button_mobile").addEventListener("click", previousLineChange);
+// document.getElementById("reset_button_mobile").addEventListener("click", () => location.reload());
+
+function renderObservations(stepMessage) {
+  // Update the step message
+  const stepMsgDiv = document.getElementById("observation-step-message");
+  if (stepMsgDiv) {
+    stepMsgDiv.innerHTML = stepMessage || "";
+  }
+
+  // Render the intermediate vertices in the table format
+  const table = document.getElementById("observations-table");
+  if (table) {
+    const tbody = table.querySelector('.table-body');
+    if (tbody) {
+      tbody.innerHTML = ""; // Clear previous observations
+      
+      // Add vertices
+      for (let i = 0; i < currentIntermediateVertices.length; i++) {
+        const vertex = currentIntermediateVertices[i];
+        const row = document.createElement('tr');
+        row.innerHTML = `<td>Vertex ${i + 1}</td><td>(${Math.round(vertex.x)}, ${Math.round(vertex.y)})</td>`;
+        tbody.appendChild(row);
+      }
+    }
+  }
+}
+
+// Add this to the initialization code
+function initializeStepHistory() {
+  // Save initial state
+  const initialStep = {
+    currentLine: 0,
+    status: 0,
+    isDark: 0,
+    firstPointStatus: 0,
+    currentPoint: firstPoint,
+    intersection_x: undefined,
+    intersection_y: undefined,
+    PointsX: [...initialPointsX],
+    PointsY: [...initialPointsY],
+    dupPointsX: [...initialPointsX],
+    dupPointsY: [...initialPointsY],
+    noOfIterations: 0,
+    transitionIteration: 0
+  };
+  stepHistory = [initialStep];
+  currentStep = 0;
+  console.log("Step history initialized");
+}
 
 
